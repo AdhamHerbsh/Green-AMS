@@ -19,7 +19,7 @@ public class AuthController {
     User user = new User();
 
     // User Data Access Object Intialization
-    UserDAO dao = new UserDAO();
+    UserDAO user_dao = new UserDAO();
     
     public AuthController() {
     
@@ -27,8 +27,7 @@ public class AuthController {
     
 
     public boolean Login(User user) {
-        
-        return dao.getUser(user);
+        return user_dao.checkUser(user);
     }
     
     public boolean Register(User user) {
@@ -41,9 +40,7 @@ public class AuthController {
         user.getRole();
         user.getCreated_date();
             
-        return dao.addUser(user);        
+        return user_dao.addUser(user);        
     }
-    
-    
-    
+       
 }

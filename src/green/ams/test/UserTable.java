@@ -37,7 +37,7 @@ public class UserTable {
 
             while (rs.next()) {
 
-                id = rs.getString("Email");
+                id = rs.getString(1);
 
                 System.out.println(id);
             }

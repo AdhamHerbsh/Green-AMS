@@ -6,17 +6,23 @@
 package green.ams;
 
 import green.ams.components.StarRating;
+import green.ams.controllers.AreaController;
+import green.ams.controllers.AttachementsController;
 import green.ams.controllers.UserController;
+import green.ams.models.Area;
+import green.ams.models.Attachements;
 import green.ams.models.Evaluate;
 import green.ams.models.Feedback;
 import green.ams.models.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Frame;
+import java.io.File;
 import java.sql.Date;
 import java.util.ResourceBundle;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
@@ -34,19 +40,17 @@ public class USER extends javax.swing.JFrame {
      *
      * @param language
      */
-    public USER() {
-        initComponents();
-
-        Start();
-
-        switchLanguage();
-    }
-
     // APP Frame Intialization
     APP app;
 
     // User Model Intializaition
     User user;
+
+    // Area Model Intializaition
+    Area area;
+
+    // Attachements Model Intializaition
+    Attachements attachements;
 
     // Evaluate Model Intializaition
     Evaluate evaluate;
@@ -54,11 +58,28 @@ public class USER extends javax.swing.JFrame {
     // Feedback Model Intializaition
     Feedback feedback;
 
-    // User Authentication Intializaition
+    // User Controller Intializaition
     UserController user_controller = new UserController();
+
+    // Area Controller Intializaition
+    AreaController area_controller = new AreaController();
+
+    // Attachements Controller Intializaition
+    AttachementsController attachements_controller = new AttachementsController();
 
     // Current Date Intializaition
     Date current_date;
+
+    private JFileChooser fileChooser;
+    private File[] files;
+
+    public USER() {
+        initComponents();
+
+        Start();
+
+        switchLanguage();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,13 +95,14 @@ public class USER extends javax.swing.JFrame {
         BtnSignOut = new javax.swing.JButton();
         BtnSupport = new javax.swing.JLabel();
         BtnSetting = new javax.swing.JLabel();
-        BtnUserProfile = new javax.swing.JLabel();
+        nav_profile = new javax.swing.JLabel();
         UserNavigation = new javax.swing.JPanel();
         nav_rate = new javax.swing.JLabel();
         nav_consultant = new javax.swing.JLabel();
         nav_sample = new javax.swing.JLabel();
         nav_location = new javax.swing.JLabel();
         PanelFeedback = new javax.swing.JPanel();
+        FeedbackPanelHeader = new javax.swing.JPanel();
         PanelTitle = new javax.swing.JLabel();
         FormFeedback = new javax.swing.JPanel();
         PanelContainer = new javax.swing.JPanel();
@@ -116,6 +138,45 @@ public class USER extends javax.swing.JFrame {
         PanelButtons1 = new javax.swing.JPanel();
         BtnSave = new javax.swing.JButton();
         BtnBack1 = new javax.swing.JButton();
+        PanelPublicLocations = new javax.swing.JPanel();
+        PanelPublicLocationHeader = new javax.swing.JPanel();
+        PanelTitle1 = new javax.swing.JLabel();
+        nav_requests = new javax.swing.JLabel();
+        FormPublicLocation = new javax.swing.JPanel();
+        PanelContainer2 = new javax.swing.JPanel();
+        PanelLeft2 = new javax.swing.JPanel();
+        LblDescription = new javax.swing.JLabel();
+        ScrollPane1 = new javax.swing.JScrollPane();
+        TADescription = new javax.swing.JTextArea();
+        CotainerBtnFile = new javax.swing.JPanel();
+        LblImages = new javax.swing.JLabel();
+        BtnChooseImages = new javax.swing.JButton();
+        PanelRight2 = new javax.swing.JPanel();
+        LblRegionName = new javax.swing.JLabel();
+        TFRegionName = new javax.swing.JTextField();
+        LblAddress = new javax.swing.JLabel();
+        TFAddress = new javax.swing.JTextField();
+        LblLandArea = new javax.swing.JLabel();
+        TFLandArea = new javax.swing.JTextField();
+        PanelButtons2 = new javax.swing.JPanel();
+        BtnSend1 = new javax.swing.JButton();
+        BtnBack2 = new javax.swing.JButton();
+        PanelSamples = new javax.swing.JPanel();
+        PanelSamplesHeader = new javax.swing.JPanel();
+        PanelTitle2 = new javax.swing.JLabel();
+        nav_cart = new javax.swing.JLabel();
+        SamplesNavigation = new javax.swing.JPanel();
+        nav_create = new javax.swing.JLabel();
+        nav_suggested = new javax.swing.JLabel();
+        nav_external_suggested = new javax.swing.JLabel();
+        LblBack = new javax.swing.JLabel();
+        LblTruckIcon = new javax.swing.JLabel();
+        PanelConsultant = new javax.swing.JPanel();
+        PanelConsultantHeader = new javax.swing.JPanel();
+        PanelTitle3 = new javax.swing.JLabel();
+        PanelButtons4 = new javax.swing.JPanel();
+        BtnSend3 = new javax.swing.JButton();
+        BtnBack4 = new javax.swing.JButton();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("green/ams/Bundle"); // NOI18N
         jMenu1.setText(bundle.getString("USER.jMenu1.text")); // NOI18N
@@ -162,10 +223,10 @@ public class USER extends javax.swing.JFrame {
         });
         PanelHome.add(BtnSetting, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 10, 70, 70));
 
-        BtnUserProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/settings-removebg-preview.png"))); // NOI18N
-        BtnUserProfile.setText(bundle.getString("USER.BtnUserProfile.text")); // NOI18N
-        BtnUserProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        PanelHome.add(BtnUserProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 10, 70, 70));
+        nav_profile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/settings-removebg-preview.png"))); // NOI18N
+        nav_profile.setText(bundle.getString("USER.nav_profile.text")); // NOI18N
+        nav_profile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        PanelHome.add(nav_profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 10, 70, 70));
 
         UserNavigation.setBackground(new java.awt.Color(245, 255, 243));
         UserNavigation.setMinimumSize(new java.awt.Dimension(500, 500));
@@ -191,6 +252,11 @@ public class USER extends javax.swing.JFrame {
         nav_consultant.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         nav_consultant.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         nav_consultant.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_consultant.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_consultantMouseClicked(evt);
+            }
+        });
         UserNavigation.add(nav_consultant);
 
         nav_sample.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
@@ -199,6 +265,11 @@ public class USER extends javax.swing.JFrame {
         nav_sample.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         nav_sample.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         nav_sample.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_sample.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_sampleMouseClicked(evt);
+            }
+        });
         UserNavigation.add(nav_sample);
 
         nav_location.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
@@ -207,12 +278,17 @@ public class USER extends javax.swing.JFrame {
         nav_location.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         nav_location.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         nav_location.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_location.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_locationMouseClicked(evt);
+            }
+        });
         UserNavigation.add(nav_location);
 
         PanelHome.add(UserNavigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 1350, -1));
 
         getContentPane().add(PanelHome);
-        PanelHome.setBounds(0, 0, 1366, 768);
+        PanelHome.setBounds(0, 0, 1366, 730);
 
         PanelFeedback.setBackground(new java.awt.Color(245, 255, 243));
         PanelFeedback.setEnabled(false);
@@ -221,10 +297,16 @@ public class USER extends javax.swing.JFrame {
         PanelFeedback.setPreferredSize(new java.awt.Dimension(1366, 768));
         PanelFeedback.setLayout(new java.awt.BorderLayout(0, 30));
 
+        FeedbackPanelHeader.setBackground(new java.awt.Color(203, 225, 196));
+        FeedbackPanelHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        FeedbackPanelHeader.setLayout(new java.awt.BorderLayout());
+
         PanelTitle.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
         PanelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         PanelTitle.setText(bundle.getString("USER.PanelTitle.text")); // NOI18N
-        PanelFeedback.add(PanelTitle, java.awt.BorderLayout.PAGE_START);
+        FeedbackPanelHeader.add(PanelTitle, java.awt.BorderLayout.PAGE_START);
+
+        PanelFeedback.add(FeedbackPanelHeader, java.awt.BorderLayout.PAGE_START);
 
         FormFeedback.setMaximumSize(new java.awt.Dimension(1366, 768));
         FormFeedback.setMinimumSize(new java.awt.Dimension(100, 100));
@@ -239,7 +321,7 @@ public class USER extends javax.swing.JFrame {
         PanelLeft.setBackground(new java.awt.Color(245, 255, 243));
         PanelLeft.setMaximumSize(new java.awt.Dimension(1366, 768));
         PanelLeft.setMinimumSize(new java.awt.Dimension(100, 100));
-        PanelLeft.setPreferredSize(new java.awt.Dimension(500, 300));
+        PanelLeft.setPreferredSize(new java.awt.Dimension(500, 400));
         PanelLeft.setLayout(new java.awt.BorderLayout());
 
         LblMessage.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
@@ -263,8 +345,8 @@ public class USER extends javax.swing.JFrame {
         PanelLeft.add(ScrollPane, java.awt.BorderLayout.CENTER);
 
         PanelRight.setBackground(new java.awt.Color(245, 255, 243));
-        PanelRight.setPreferredSize(new java.awt.Dimension(500, 500));
-        PanelRight.setLayout(new java.awt.GridLayout(6, 0, 0, 5));
+        PanelRight.setPreferredSize(new java.awt.Dimension(500, 400));
+        PanelRight.setLayout(new java.awt.GridLayout(8, 0, 0, 5));
 
         LblName.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
         LblName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -359,9 +441,9 @@ public class USER extends javax.swing.JFrame {
             .addGroup(PanelContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PanelRight, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PanelRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(PanelLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(200, 200, 200)
+                .addGap(100, 100, 100)
                 .addComponent(PanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -371,7 +453,7 @@ public class USER extends javax.swing.JFrame {
         PanelFeedback.add(FormFeedback, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(PanelFeedback);
-        PanelFeedback.setBounds(0, 0, 1366, 768);
+        PanelFeedback.setBounds(0, 0, 1366, 730);
 
         PanelUserProfile.setBackground(new java.awt.Color(245, 255, 243));
         PanelUserProfile.setAlignmentX(0.15F);
@@ -513,6 +595,360 @@ public class USER extends javax.swing.JFrame {
         getContentPane().add(PanelUserProfile);
         PanelUserProfile.setBounds(0, 0, 1366, 768);
 
+        PanelPublicLocations.setBackground(new java.awt.Color(245, 255, 243));
+        PanelPublicLocations.setEnabled(false);
+        PanelPublicLocations.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelPublicLocations.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelPublicLocations.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelPublicLocations.setLayout(new java.awt.BorderLayout(0, 30));
+
+        PanelPublicLocationHeader.setBackground(new java.awt.Color(203, 225, 196));
+        PanelPublicLocationHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        PanelPublicLocationHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle1.setBackground(new java.awt.Color(203, 225, 196));
+        PanelTitle1.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle1.setText(bundle.getString("USER.PanelTitle1.text")); // NOI18N
+        PanelPublicLocationHeader.add(PanelTitle1, java.awt.BorderLayout.CENTER);
+
+        nav_requests.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        nav_requests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/requests.png"))); // NOI18N
+        nav_requests.setText(bundle.getString("USER.nav_requests.text")); // NOI18N
+        nav_requests.setAlignmentX(0.5F);
+        nav_requests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_requests.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        nav_requests.setMaximumSize(new java.awt.Dimension(122, 100));
+        PanelPublicLocationHeader.add(nav_requests, java.awt.BorderLayout.LINE_START);
+
+        PanelPublicLocations.add(PanelPublicLocationHeader, java.awt.BorderLayout.PAGE_START);
+
+        FormPublicLocation.setMaximumSize(new java.awt.Dimension(1366, 768));
+        FormPublicLocation.setPreferredSize(new java.awt.Dimension(1366, 300));
+        FormPublicLocation.setLayout(new java.awt.BorderLayout());
+
+        PanelContainer2.setBackground(new java.awt.Color(245, 255, 243));
+        PanelContainer2.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelContainer2.setMinimumSize(new java.awt.Dimension(100, 100));
+        PanelContainer2.setPreferredSize(new java.awt.Dimension(768, 100));
+
+        PanelLeft2.setBackground(new java.awt.Color(245, 255, 243));
+        PanelLeft2.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelLeft2.setMinimumSize(new java.awt.Dimension(100, 100));
+        PanelLeft2.setPreferredSize(new java.awt.Dimension(500, 400));
+        PanelLeft2.setLayout(new java.awt.BorderLayout(0, 20));
+
+        LblDescription.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblDescription.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        LblDescription.setText(bundle.getString("USER.LblDescription.text")); // NOI18N
+        PanelLeft2.add(LblDescription, java.awt.BorderLayout.PAGE_START);
+
+        ScrollPane1.setMaximumSize(new java.awt.Dimension(300, 300));
+        ScrollPane1.setPreferredSize(new java.awt.Dimension(300, 200));
+
+        TADescription.setColumns(20);
+        TADescription.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TADescription.setLineWrap(true);
+        TADescription.setRows(5);
+        TADescription.setWrapStyleWord(true);
+        TADescription.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TADescription.setMaximumSize(new java.awt.Dimension(300, 300));
+        TADescription.setPreferredSize(new java.awt.Dimension(300, 200));
+        ScrollPane1.setViewportView(TADescription);
+
+        PanelLeft2.add(ScrollPane1, java.awt.BorderLayout.CENTER);
+
+        CotainerBtnFile.setBackground(new java.awt.Color(245, 255, 243));
+        CotainerBtnFile.setLayout(new java.awt.GridLayout(1, 2, 30, 0));
+
+        LblImages.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblImages.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        LblImages.setText(bundle.getString("USER.LblImages.text")); // NOI18N
+        CotainerBtnFile.add(LblImages);
+
+        BtnChooseImages.setBackground(new java.awt.Color(161, 164, 151));
+        BtnChooseImages.setFont(new java.awt.Font("Traditional Arabic", 0, 14)); // NOI18N
+        BtnChooseImages.setForeground(new java.awt.Color(255, 255, 255));
+        BtnChooseImages.setText(bundle.getString("USER.BtnChooseImages.text")); // NOI18N
+        BtnChooseImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnChooseImagesActionPerformed(evt);
+            }
+        });
+        CotainerBtnFile.add(BtnChooseImages);
+
+        PanelLeft2.add(CotainerBtnFile, java.awt.BorderLayout.PAGE_END);
+
+        PanelRight2.setBackground(new java.awt.Color(245, 255, 243));
+        PanelRight2.setPreferredSize(new java.awt.Dimension(500, 400));
+        PanelRight2.setLayout(new java.awt.GridLayout(8, 0, 0, 5));
+
+        LblRegionName.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblRegionName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        LblRegionName.setText(bundle.getString("USER.LblRegionName.text")); // NOI18N
+        PanelRight2.add(LblRegionName);
+
+        TFRegionName.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TFRegionName.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        TFRegionName.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TFRegionName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        TFRegionName.setMaximumSize(new java.awt.Dimension(100, 200));
+        TFRegionName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TFRegionNameActionPerformed(evt);
+            }
+        });
+        PanelRight2.add(TFRegionName);
+
+        LblAddress.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblAddress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        LblAddress.setText(bundle.getString("USER.LblAddress.text")); // NOI18N
+        PanelRight2.add(LblAddress);
+
+        TFAddress.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TFAddress.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        TFAddress.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TFAddress.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        PanelRight2.add(TFAddress);
+
+        LblLandArea.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblLandArea.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        LblLandArea.setText(bundle.getString("USER.LblLandArea.text")); // NOI18N
+        PanelRight2.add(LblLandArea);
+
+        TFLandArea.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TFLandArea.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        TFLandArea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TFLandArea.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        PanelRight2.add(TFLandArea);
+
+        PanelButtons2.setBackground(new java.awt.Color(245, 255, 243));
+
+        BtnSend1.setBackground(new java.awt.Color(33, 104, 73));
+        BtnSend1.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        BtnSend1.setForeground(new java.awt.Color(255, 255, 255));
+        BtnSend1.setText(bundle.getString("USER.BtnSend1.text")); // NOI18N
+        BtnSend1.setAlignmentY(0.0F);
+        BtnSend1.setBorder(null);
+        BtnSend1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnSend1.setDefaultCapable(false);
+        BtnSend1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnSend1.setMaximumSize(new java.awt.Dimension(80, 30));
+        BtnSend1.setMinimumSize(new java.awt.Dimension(40, 15));
+        BtnSend1.setPreferredSize(new java.awt.Dimension(100, 40));
+        BtnSend1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSend1ActionPerformed(evt);
+            }
+        });
+        PanelButtons2.add(BtnSend1);
+
+        BtnBack2.setBackground(new java.awt.Color(121, 110, 113));
+        BtnBack2.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        BtnBack2.setForeground(new java.awt.Color(255, 255, 255));
+        BtnBack2.setText(bundle.getString("USER.BtnBack2.text")); // NOI18N
+        BtnBack2.setAlignmentY(0.0F);
+        BtnBack2.setBorder(null);
+        BtnBack2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnBack2.setDefaultCapable(false);
+        BtnBack2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnBack2.setMaximumSize(new java.awt.Dimension(80, 30));
+        BtnBack2.setMinimumSize(new java.awt.Dimension(40, 15));
+        BtnBack2.setPreferredSize(new java.awt.Dimension(100, 40));
+        BtnBack2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBack2ActionPerformed(evt);
+            }
+        });
+        PanelButtons2.add(BtnBack2);
+
+        javax.swing.GroupLayout PanelContainer2Layout = new javax.swing.GroupLayout(PanelContainer2);
+        PanelContainer2.setLayout(PanelContainer2Layout);
+        PanelContainer2Layout.setHorizontalGroup(
+            PanelContainer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelContainer2Layout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addComponent(PanelLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(PanelRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelContainer2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(PanelButtons2, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        PanelContainer2Layout.setVerticalGroup(
+            PanelContainer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelContainer2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelContainer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanelRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PanelLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(100, 100, 100)
+                .addComponent(PanelButtons2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
+
+        FormPublicLocation.add(PanelContainer2, java.awt.BorderLayout.CENTER);
+
+        PanelPublicLocations.add(FormPublicLocation, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(PanelPublicLocations);
+        PanelPublicLocations.setBounds(0, 0, 1366, 768);
+
+        PanelSamples.setBackground(new java.awt.Color(245, 255, 243));
+        PanelSamples.setEnabled(false);
+        PanelSamples.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelSamples.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelSamples.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelSamples.setLayout(new java.awt.BorderLayout(0, 30));
+
+        PanelSamplesHeader.setBackground(new java.awt.Color(203, 225, 196));
+        PanelSamplesHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        PanelSamplesHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle2.setBackground(new java.awt.Color(203, 225, 196));
+        PanelTitle2.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle2.setText(bundle.getString("USER.PanelTitle2.text")); // NOI18N
+        PanelSamplesHeader.add(PanelTitle2, java.awt.BorderLayout.CENTER);
+
+        nav_cart.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        nav_cart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/cart-removebg-preview.png"))); // NOI18N
+        nav_cart.setText(bundle.getString("USER.nav_cart.text")); // NOI18N
+        nav_cart.setAlignmentX(0.5F);
+        nav_cart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_cart.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        nav_cart.setMaximumSize(new java.awt.Dimension(122, 100));
+        PanelSamplesHeader.add(nav_cart, java.awt.BorderLayout.LINE_START);
+
+        PanelSamples.add(PanelSamplesHeader, java.awt.BorderLayout.PAGE_START);
+
+        SamplesNavigation.setBackground(new java.awt.Color(245, 255, 243));
+        SamplesNavigation.setMinimumSize(new java.awt.Dimension(500, 200));
+        SamplesNavigation.setPreferredSize(new java.awt.Dimension(1350, 200));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 50);
+        flowLayout1.setAlignOnBaseline(true);
+        SamplesNavigation.setLayout(flowLayout1);
+
+        nav_create.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_create.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/create-sample-removebg-preview.png"))); // NOI18N
+        nav_create.setText(bundle.getString("USER.nav_create.text")); // NOI18N
+        nav_create.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_create.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_create.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        SamplesNavigation.add(nav_create);
+
+        nav_suggested.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_suggested.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/suggestion-sample-removebg-preview.png"))); // NOI18N
+        nav_suggested.setText(bundle.getString("USER.nav_suggested.text")); // NOI18N
+        nav_suggested.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_suggested.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_suggested.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        SamplesNavigation.add(nav_suggested);
+        nav_suggested.getAccessibleContext().setAccessibleDescription(bundle.getString("USER.nav_suggested.AccessibleContext.accessibleDescription")); // NOI18N
+
+        nav_external_suggested.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_external_suggested.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/external-suggestion-sample-removebg-preview.png"))); // NOI18N
+        nav_external_suggested.setText(bundle.getString("USER.nav_external_suggested.text")); // NOI18N
+        nav_external_suggested.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_external_suggested.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_external_suggested.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_external_suggested.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_external_suggestedMouseClicked(evt);
+            }
+        });
+        SamplesNavigation.add(nav_external_suggested);
+
+        LblBack.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblBack.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        LblBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/back-icon-removebg-preview.png"))); // NOI18N
+        LblBack.setText(bundle.getString("USER.LblBack.text")); // NOI18N
+        LblBack.setAlignmentX(5.0F);
+        LblBack.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        LblBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        LblBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LblBackMouseClicked(evt);
+            }
+        });
+        SamplesNavigation.add(LblBack);
+
+        PanelSamples.add(SamplesNavigation, java.awt.BorderLayout.CENTER);
+
+        LblTruckIcon.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        LblTruckIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/truck-removebg-preview.png"))); // NOI18N
+        LblTruckIcon.setText(bundle.getString("USER.LblTruckIcon.text")); // NOI18N
+        PanelSamples.add(LblTruckIcon, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(PanelSamples);
+        PanelSamples.setBounds(0, 0, 1366, 768);
+
+        PanelConsultant.setBackground(new java.awt.Color(245, 255, 243));
+        PanelConsultant.setEnabled(false);
+        PanelConsultant.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setLayout(new java.awt.BorderLayout(0, 30));
+
+        PanelConsultantHeader.setBackground(new java.awt.Color(203, 225, 196));
+        PanelConsultantHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        PanelConsultantHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle3.setBackground(new java.awt.Color(203, 225, 196));
+        PanelTitle3.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle3.setText(bundle.getString("USER.PanelTitle3.text")); // NOI18N
+        PanelConsultantHeader.add(PanelTitle3, java.awt.BorderLayout.CENTER);
+
+        PanelConsultant.add(PanelConsultantHeader, java.awt.BorderLayout.PAGE_START);
+
+        PanelButtons4.setBackground(new java.awt.Color(245, 255, 243));
+
+        BtnSend3.setBackground(new java.awt.Color(33, 104, 73));
+        BtnSend3.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        BtnSend3.setForeground(new java.awt.Color(255, 255, 255));
+        BtnSend3.setText(bundle.getString("USER.BtnSend3.text")); // NOI18N
+        BtnSend3.setAlignmentY(0.0F);
+        BtnSend3.setBorder(null);
+        BtnSend3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnSend3.setDefaultCapable(false);
+        BtnSend3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnSend3.setMaximumSize(new java.awt.Dimension(80, 30));
+        BtnSend3.setMinimumSize(new java.awt.Dimension(40, 15));
+        BtnSend3.setPreferredSize(new java.awt.Dimension(100, 40));
+        BtnSend3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSend3ActionPerformed(evt);
+            }
+        });
+        PanelButtons4.add(BtnSend3);
+
+        BtnBack4.setBackground(new java.awt.Color(121, 110, 113));
+        BtnBack4.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        BtnBack4.setForeground(new java.awt.Color(255, 255, 255));
+        BtnBack4.setText(bundle.getString("USER.BtnBack4.text")); // NOI18N
+        BtnBack4.setAlignmentY(0.0F);
+        BtnBack4.setBorder(null);
+        BtnBack4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnBack4.setDefaultCapable(false);
+        BtnBack4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnBack4.setMaximumSize(new java.awt.Dimension(80, 30));
+        BtnBack4.setMinimumSize(new java.awt.Dimension(40, 15));
+        BtnBack4.setPreferredSize(new java.awt.Dimension(100, 40));
+        BtnBack4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBack4ActionPerformed(evt);
+            }
+        });
+        PanelButtons4.add(BtnBack4);
+
+        PanelConsultant.add(PanelButtons4, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(PanelConsultant);
+        PanelConsultant.setBounds(0, 0, 1366, 768);
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -602,15 +1038,104 @@ public class USER extends javax.swing.JFrame {
 
     private void BtnSettingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnSettingMouseClicked
         // TODO add your handling code here:
-        
+
         MoveTo(PanelHome, PanelUserProfile);
     }//GEN-LAST:event_BtnSettingMouseClicked
 
     private void BtnBack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBack1ActionPerformed
         // TODO add your handling code here:
-        
+
         MoveTo(PanelUserProfile, PanelHome);
+
     }//GEN-LAST:event_BtnBack1ActionPerformed
+
+    private void BtnBack2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBack2ActionPerformed
+        // TODO add your handling code here:
+        MoveTo(PanelPublicLocations, PanelHome);
+    }//GEN-LAST:event_BtnBack2ActionPerformed
+
+    private void BtnSend1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSend1ActionPerformed
+        // TODO add your handling code here:
+
+        area = new Area();
+        area.setUser_id(GLOBAL.user_id);
+        area.setRegion_name(TFRegionName.getText().trim());
+        area.setAddress(TFAddress.getText().trim());
+        area.setLand_area(TFLandArea.getText().trim());
+        area.setDescription(TADescription.getText().trim());
+
+        System.out.println(area.getUser_id());
+        System.out.println(area.getRegion_name());
+        System.out.println(area.getAddress());
+        System.out.println(area.getLand_area());
+        System.out.println(area.getDescription());
+
+        if (files != null) {
+            if (area_controller.addArea(area)) {
+                System.out.println(GLOBAL.area_id);
+                area.setId(GLOBAL.area_id);
+                attachements.setArea_id(GLOBAL.area_id);
+                attachements.setFiles(files);
+                attachements_controller.uploadAttachements(attachements);
+            }
+        } else {
+           
+        }
+    }//GEN-LAST:event_BtnSend1ActionPerformed
+
+    private void nav_locationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_locationMouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelHome, PanelPublicLocations);
+
+    }//GEN-LAST:event_nav_locationMouseClicked
+
+    private void TFRegionNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFRegionNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TFRegionNameActionPerformed
+
+    private void nav_external_suggestedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_external_suggestedMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nav_external_suggestedMouseClicked
+
+    private void BtnSend3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSend3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnSend3ActionPerformed
+
+    private void BtnBack4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBack4ActionPerformed
+        // TODO add your handling code here:
+
+        MoveTo(PanelConsultant, PanelHome);
+
+    }//GEN-LAST:event_BtnBack4ActionPerformed
+
+    private void nav_consultantMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_consultantMouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelHome, PanelConsultant);
+
+    }//GEN-LAST:event_nav_consultantMouseClicked
+
+    private void nav_sampleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_sampleMouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelHome, PanelSamples);
+
+    }//GEN-LAST:event_nav_sampleMouseClicked
+
+    private void LblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblBackMouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelSamples, PanelHome);
+
+    }//GEN-LAST:event_LblBackMouseClicked
+
+    private void BtnChooseImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnChooseImagesActionPerformed
+        // TODO add your handling code here:
+
+        this.files = chooseFiles();
+
+    }//GEN-LAST:event_BtnChooseImagesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -650,37 +1175,71 @@ public class USER extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnBack1;
+    private javax.swing.JButton BtnBack2;
+    private javax.swing.JButton BtnBack4;
+    private javax.swing.JButton BtnChooseImages;
     private javax.swing.JButton BtnSave;
     private javax.swing.JButton BtnSend;
+    private javax.swing.JButton BtnSend1;
+    private javax.swing.JButton BtnSend3;
     private javax.swing.JLabel BtnSetting;
     private javax.swing.JButton BtnSignOut;
     private javax.swing.JLabel BtnSupport;
-    private javax.swing.JLabel BtnUserProfile;
+    private javax.swing.JPanel CotainerBtnFile;
+    private javax.swing.JPanel FeedbackPanelHeader;
     private javax.swing.JPanel FormFeedback;
+    private javax.swing.JPanel FormPublicLocation;
     private javax.swing.JPanel FormUserProfile;
+    private javax.swing.JLabel LblAddress;
+    private javax.swing.JLabel LblBack;
+    private javax.swing.JLabel LblDescription;
     private javax.swing.JLabel LblEmailAddress;
+    private javax.swing.JLabel LblImages;
+    private javax.swing.JLabel LblLandArea;
     private javax.swing.JLabel LblMessage;
     private javax.swing.JLabel LblName;
     private javax.swing.JLabel LblName2;
     private javax.swing.JLabel LblPhone;
+    private javax.swing.JLabel LblRegionName;
+    private javax.swing.JLabel LblTruckIcon;
     private javax.swing.JLabel LblUserName;
     private javax.swing.JPanel PanelButtons;
     private javax.swing.JPanel PanelButtons1;
+    private javax.swing.JPanel PanelButtons2;
+    private javax.swing.JPanel PanelButtons4;
+    private javax.swing.JPanel PanelConsultant;
+    private javax.swing.JPanel PanelConsultantHeader;
     private javax.swing.JPanel PanelContainer;
     private javax.swing.JPanel PanelContainer1;
+    private javax.swing.JPanel PanelContainer2;
     private javax.swing.JPanel PanelFeedback;
     private javax.swing.JPanel PanelHome;
     private javax.swing.JPanel PanelLeft;
     private javax.swing.JPanel PanelLeft1;
+    private javax.swing.JPanel PanelLeft2;
+    private javax.swing.JPanel PanelPublicLocationHeader;
+    private javax.swing.JPanel PanelPublicLocations;
     private javax.swing.JPanel PanelRight;
     private javax.swing.JPanel PanelRight1;
+    private javax.swing.JPanel PanelRight2;
+    private javax.swing.JPanel PanelSamples;
+    private javax.swing.JPanel PanelSamplesHeader;
     private javax.swing.JLabel PanelTitle;
+    private javax.swing.JLabel PanelTitle1;
+    private javax.swing.JLabel PanelTitle2;
+    private javax.swing.JLabel PanelTitle3;
     private javax.swing.JPanel PanelUserProfile;
+    private javax.swing.JPanel SamplesNavigation;
     private javax.swing.JScrollPane ScrollPane;
+    private javax.swing.JScrollPane ScrollPane1;
+    private javax.swing.JTextArea TADescription;
     private javax.swing.JTextArea TAMessage;
+    private javax.swing.JTextField TFAddress;
     private javax.swing.JTextField TFEmailAddress;
     private javax.swing.JTextField TFFullName;
+    private javax.swing.JTextField TFLandArea;
     private javax.swing.JTextField TFPhone;
+    private javax.swing.JTextField TFRegionName;
     private javax.swing.JLabel UPLblAddress;
     private javax.swing.JLabel UPLblFullName;
     private javax.swing.JLabel UPLblPhone;
@@ -691,16 +1250,26 @@ public class USER extends javax.swing.JFrame {
     private javax.swing.JTextField UPTFResetPassword;
     private javax.swing.JPanel UserNavigation;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel nav_cart;
     private javax.swing.JLabel nav_consultant;
+    private javax.swing.JLabel nav_create;
+    private javax.swing.JLabel nav_external_suggested;
     private javax.swing.JLabel nav_location;
+    private javax.swing.JLabel nav_profile;
     private javax.swing.JLabel nav_rate;
+    private javax.swing.JLabel nav_requests;
     private javax.swing.JLabel nav_sample;
+    private javax.swing.JLabel nav_suggested;
     // End of variables declaration//GEN-END:variables
 
     private void Start() {
-        UserNavigation.setVisible(false);
+
         PanelFeedback.setVisible(false);
-        PanelUserProfile.setVisible(true);
+        PanelUserProfile.setVisible(false);
+        PanelPublicLocations.setVisible(false);
+        PanelSamples.setVisible(false);
+        PanelConsultant.setVisible(false);
+
     }
 
     private void MoveTo(JPanel o1, JPanel o2) {
@@ -722,6 +1291,22 @@ public class USER extends javax.swing.JFrame {
                 && feedback.getEmail_address() != null && !feedback.getEmail_address().isEmpty()
                 && feedback.getPhone_number() != null && !feedback.getPhone_number().isEmpty()
                 && feedback.getMessage() != null && !feedback.getMessage().isEmpty();
+    }
+
+    private File[] chooseFiles() {
+
+        attachements = new Attachements();
+
+        fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int returnValue = fileChooser.showOpenDialog(this);
+        File[] temp_files = null;
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            temp_files = fileChooser.getSelectedFiles();
+        }
+        return (temp_files != null) ? temp_files : null;
     }
 
 }

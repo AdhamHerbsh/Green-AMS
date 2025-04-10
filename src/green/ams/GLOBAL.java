@@ -18,6 +18,11 @@ import javax.swing.JLabel;
  */
 public abstract class GLOBAL {
 
+    //    User ID
+    public static int user_id;
+    //    Area ID
+    public static int area_id;
+    
     protected static Locale currentLocale = new Locale("en"); // Default locale
     protected static ResourceBundle bundle;
     

@@ -25,6 +25,8 @@ public class APP extends javax.swing.JFrame {
      *
      * @param language
      */
+    
+    
     // User Model Intializaition
     boolean is_on = true;
 
@@ -460,6 +462,8 @@ public class APP extends javax.swing.JFrame {
 
         if (auth.Login(user)) {
 
+            user.setId(GLOBAL.user_id);
+            System.out.println(user.getId());
             user_frame = new USER();
 
             user_frame.setVisible(true);
@@ -672,13 +676,18 @@ public class APP extends javax.swing.JFrame {
 
     private void Start() {
 
+        PanelSplash.setVisible(true);
         PanelGate.setVisible(false);
-        PanelSplash.setVisible(false);
         PanelSignIn.setVisible(false);
         PanelSignUp.setVisible(false);
 
     }
-
+    
+    private void MoveTo(JPanel o1, JPanel o2) {
+        o1.setVisible(false);
+        o2.setVisible(true);
+    }
+    
     private void switchLanguage() {
 
         // Toggle between English and Arabic
@@ -697,10 +706,7 @@ public class APP extends javax.swing.JFrame {
         GLOBAL.updateTextFields(this, "APP", GLOBAL.bundle);
     }
 
-    private void MoveTo(JPanel o1, JPanel o2) {
-        o1.setVisible(false);
-        o2.setVisible(true);
-    }
+
 
     public static boolean isUserValid(User user) {
         return user.getEmail() != null && !user.getFull_name().isEmpty()

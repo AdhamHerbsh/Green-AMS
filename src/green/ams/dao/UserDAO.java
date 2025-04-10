@@ -1,5 +1,7 @@
 package green.ams.dao;
 
+import green.ams.APP;
+import green.ams.GLOBAL;
 import green.ams.models.User;
 import green.ams.services.dbhelper;
 import java.sql.Connection;
@@ -48,31 +50,32 @@ public class UserDAO {
         return id;
     }
 
-    public boolean getUser(User user) {
+    public boolean checkUser(User user) {
         if (user == null || user.getEmail() == null || user.getPassword() == null) {
             System.out.println("Error: User or credentials are null");
             return false;
         }
-        
+
         String username = user.getEmail();
         String password = user.getPassword();
         boolean found = false;
-        
+
         try {
-            String sql = "SELECT Email, Password FROM users WHERE Email = ? AND Password = ?";
+            String sql = "SELECT ID, Email, Password FROM users WHERE Email = ? AND Password = ?";
             pst = conn.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, password);
-            
+
             rs = pst.executeQuery();
-            
+
             if (rs.next()) {
                 String username_db = rs.getString("Email");
                 String password_db = rs.getString("Password");
-                
+
                 if (username.equals(username_db) && password.equals(password_db)) {
                     System.out.println("User found");
                     found = true;
+                    GLOBAL.user_id = rs.getInt("ID");
                 } else {
                     System.out.println("User not found");
                     printUserModel(user);
@@ -92,7 +95,7 @@ public class UserDAO {
         try {
             st = conn.createStatement();
             rs = st.executeQuery("SELECT * FROM users");
-            
+
             while (rs.next()) {
                 System.out.print(rs.getString(1));
                 System.out.println(" -- " + rs.getString(2));
@@ -109,13 +112,13 @@ public class UserDAO {
             System.out.println("Error: User object is null.");
             return false;
         }
-        
+
         boolean success = false;
         String sql = "INSERT INTO users (FullName, Email, Address, PhoneNumber, Role, Password, CreatedDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
+
         try {
             pst = conn.prepareStatement(sql);
-            
+
             pst.setString(1, user.getFull_name());
             pst.setString(2, user.getEmail());
             pst.setString(3, user.getAddress());
@@ -123,7 +126,7 @@ public class UserDAO {
             pst.setString(5, "User Public");
             pst.setString(6, user.getPassword());
             pst.setDate(7, new java.sql.Date(new java.util.Date().getTime()));
-            
+
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("User inserted successfully!");
@@ -134,7 +137,7 @@ public class UserDAO {
         } finally {
             closeResources(pst, null, null);
         }
-        
+
         return success;
     }
 
@@ -143,7 +146,7 @@ public class UserDAO {
             System.out.println("User is null");
             return;
         }
-        
+
         System.out.println(user.getId());
         System.out.println(user.getFull_name());
         System.out.println(user.getEmail());
@@ -153,7 +156,7 @@ public class UserDAO {
         System.out.println(user.getRole());
         System.out.println(user.getCreated_date());
     }
-    
+
     private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) {
