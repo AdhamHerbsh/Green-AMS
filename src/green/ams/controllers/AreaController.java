@@ -7,7 +7,9 @@ package green.ams.controllers;
 
 import green.ams.dao.AreaDAO;
 import green.ams.models.Area;
+import green.ams.models.Request;
 import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -23,4 +25,8 @@ public class AreaController {
     public boolean addArea(Area area){
         return area_dao.addArea(area);
     }   
+
+    public List<Request> areaRequests() {
+        return area_dao.getRequests();
+    }
 }

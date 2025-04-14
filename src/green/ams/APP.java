@@ -46,6 +46,9 @@ public class APP extends javax.swing.JFrame {
     Date current_date;
 
     public APP() {
+        
+        
+        
         initComponents();
 
         Start();
@@ -101,6 +104,7 @@ public class APP extends javax.swing.JFrame {
         setTitle(bundle.getString("APP.title")); // NOI18N
         setBackground(new java.awt.Color(237, 233, 224));
         setForeground(new java.awt.Color(237, 233, 224));
+        setMaximumSize(new java.awt.Dimension(1366, 768));
         setMinimumSize(new java.awt.Dimension(1366, 768));
         setName("AppJFrame"); // NOI18N
         setResizable(false);
@@ -134,7 +138,7 @@ public class APP extends javax.swing.JFrame {
         PanelSplash.add(Splash, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         getContentPane().add(PanelSplash);
-        PanelSplash.setBounds(0, 0, 1366, 730);
+        PanelSplash.setBounds(0, 0, 1366, 770);
 
         PanelGate.setBackground(new java.awt.Color(248, 255, 245));
         PanelGate.setPreferredSize(new java.awt.Dimension(1366, 768));
@@ -507,11 +511,11 @@ public class APP extends javax.swing.JFrame {
 
         if (isUserValid(user)) {
 
-            user_frame = new USER();
-
             // Proceed with the next steps
             if (auth.Register(user)) {
+                user_frame = new USER();
                 user_frame.setVisible(true);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(rootPane, "خطاء في انشاء الحساب", "تحذير", 2);
 

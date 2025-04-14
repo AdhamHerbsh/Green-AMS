@@ -25,6 +25,8 @@ public class EvaluateDAO {
     private Statement st;
     private PreparedStatement pst;
     private ResultSet rs;
+    
+    private int feedback_id;
 
     public EvaluateDAO() {
         this.db = new dbhelper();
@@ -39,11 +41,29 @@ public class EvaluateDAO {
     }
 
     public boolean addEvaluate(Evaluate evaluate) {
-        System.out.println(evaluate.getId());
-        System.out.println(evaluate.getFeedback_id());
-        System.out.println(evaluate.getUser_id());
-        System.out.println(evaluate.getRate());
-    return false;        
+    
+        String sql = "INSERT INTO evaluations (UserID, FeedbackID, Rate) VALUES (?, ?, ?)";
+        
+        boolean success = false;
+        
+        try {
+            pst = conn.prepareStatement(sql);
+            
+            pst.setInt(1, evaluate.getUser_id());
+            pst.setInt(2, feedback_id);
+            pst.setInt(3, evaluate.getRate());
+            
+            int rowsInserted = pst.executeUpdate();
+            if (rowsInserted > 0) {
+                success = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error inserting evaluation: " + e.getMessage());
+        } finally {
+            closeResources(pst, null, null);
+        }
+        
+        return false;        
     }
 
     public boolean addFeedback(Feedback feedback) {
@@ -67,10 +87,16 @@ public class EvaluateDAO {
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("Feedback inserted successfully!");
+                
+                rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    feedback_id = rs.getInt(1);
+                }
+                
                 success = true;
             }
         } catch (SQLException e) {
-            System.out.println("Error inserting user: " + e.getMessage());
+            System.out.println("Error inserting feedback: " + e.getMessage());
         } finally {
             closeResources(pst, null, null);
         }
@@ -79,7 +105,7 @@ public class EvaluateDAO {
     }
     
 
-        private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
+    private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) {
                 resultSet.close();

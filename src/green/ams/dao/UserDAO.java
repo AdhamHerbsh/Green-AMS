@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,10 @@ public class UserDAO {
     private PreparedStatement pst;
     private ResultSet rs;
 
+    private User user;
+    private List<User> users_list;
+    
+    
     public UserDAO() {
         this.db = new dbhelper();
         try {
@@ -50,6 +56,41 @@ public class UserDAO {
         return id;
     }
 
+    public User getUser(int id) {
+        if (id <= 0) {
+            System.out.println("Error: User Id is empty");
+        }
+
+        try {
+            String sql = "SELECT ID, FullName, Email, Address, PhoneNumber, Role, Password, CreatedDate FROM users WHERE ID = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, id);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                user = new User();
+
+                user.setId(rs.getInt("ID"));
+                user.setFull_name(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone_number(rs.getString("PhoneNumber"));
+                user.setRole(rs.getString("Role"));
+                user.setPassword(rs.getString("Password"));
+                user.setCreated_date(rs.getDate("CreatedDate"));
+            } else {
+                System.out.println("No user found for this id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in SQL query: " + e.getMessage());
+        } finally {
+            closeResources(pst, null, rs);
+        }
+        return user;
+    }
+
     public boolean checkUser(User user) {
         if (user == null || user.getEmail() == null || user.getPassword() == null) {
             System.out.println("Error: User or credentials are null");
@@ -69,6 +110,7 @@ public class UserDAO {
             rs = pst.executeQuery();
 
             if (rs.next()) {
+
                 String username_db = rs.getString("Email");
                 String password_db = rs.getString("Password");
 
@@ -76,6 +118,7 @@ public class UserDAO {
                     System.out.println("User found");
                     found = true;
                     GLOBAL.user_id = rs.getInt("ID");
+
                 } else {
                     System.out.println("User not found");
                     printUserModel(user);
@@ -107,6 +150,36 @@ public class UserDAO {
         }
     }
 
+    public List<User> getUsersList() {
+        
+        users_list = new ArrayList<>();
+        
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT * FROM users");
+
+            while (rs.next()) {
+        
+                user = new User();
+                user.setFull_name(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPhone_number(rs.getString("PhoneNumber"));
+                user.setAddress(rs.getString("Address"));
+                user.setRole(rs.getString("Role"));
+                user.setCreated_date(rs.getDate("CreatedDate"));
+                
+                users_list.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in SQL query: " + e.getMessage());
+        } finally {
+            closeResources(null, st, rs);
+        }
+        
+        
+        return users_list;
+    }
+
     public boolean addUser(User user) {
         if (user == null) {
             System.out.println("Error: User object is null.");
@@ -130,7 +203,13 @@ public class UserDAO {
             int rowsInserted = pst.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("User inserted successfully!");
-                success = true;
+                rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    GLOBAL.user_id = rs.getInt(1);
+                    success = true;
+                } else {
+                    throw new SQLException("Creating area failed, no ID obtained.");
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error inserting user: " + e.getMessage());
@@ -138,6 +217,37 @@ public class UserDAO {
             closeResources(pst, null, null);
         }
 
+        return success;
+    }
+
+    public boolean updateUser(User user) {
+
+        String sql = "UPDATE users SET FullName = ?, Address = ?, PhoneNumber = ?, Password = ? WHERE ID = ?";
+
+        boolean success = false;
+        
+        User old_user = getUser(user.getId());
+        
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, user.getFull_name());
+            pst.setString(2, user.getAddress());
+            pst.setString(3, user.getPhone_number());
+            pst.setString(4, user.getPassword().equals("") ? old_user.getPassword() : user.getPassword());
+            pst.setInt(5, user.getId());
+
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows <= 0) {
+                System.out.println("No user found with ID: " + user.getId());
+            } else {
+                success = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        } finally {
+            closeResources(pst, null, null);
+
+        }
         return success;
     }
 
@@ -172,4 +282,5 @@ public class UserDAO {
             System.out.println("Error closing resources: " + e.getMessage());
         }
     }
+
 }

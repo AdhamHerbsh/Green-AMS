@@ -5,12 +5,61 @@
  */
 package green.ams;
 
-import green.ams.controllers.AuthController;
+import green.ams.components.StarRating;
+import green.ams.components.Item;
+import green.ams.components.RequestArea;
+import green.ams.components.RoundedBorder;
+import green.ams.components.WrapLayout;
+import green.ams.controllers.AreaController;
+import green.ams.controllers.AttachementsController;
+import green.ams.controllers.SampleController;
+import green.ams.controllers.UserController;
+import green.ams.models.Area;
+import green.ams.models.Attachements;
+import green.ams.models.Consultation;
+import green.ams.models.Evaluate;
+import green.ams.models.Feedback;
+import green.ams.models.Request;
+import green.ams.models.Sample;
 import green.ams.models.User;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Array;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.border.AbstractBorder;
 
 /**
  *
@@ -23,14 +72,9 @@ public class MEWA extends javax.swing.JFrame {
      *
      * @param language
      */
-    public MEWA() {
-        initComponents();
-
-        Start();
-        
-        switchLanguage();
-    }
-       
+    // Validation patterns
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[+]?[0-9]{10,13}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
 
     // APP Frame Intialization
     APP app;
@@ -38,20 +82,66 @@ public class MEWA extends javax.swing.JFrame {
     // User Model Intializaition
     User user;
 
+    // Area Model Intializaition
+    Area area;
+
+    // Attachements Model Intializaition
+    Attachements attachements;
+
+    // Evaluate Model Intializaition
+    Evaluate evaluate;
+
+    // Star Rating Component Intialization   
+    StarRating ratingComponent;
+
+    // Feedback Model Intializaition
+    Feedback feedback;
+
+    // Sample Model Intializaition
+    Sample sample;
+
+    // Consultation Model Intializaition
+    Consultation consultation;
+
+    // User Controller Intializaition
+    UserController user_controller = new UserController();
+
+    // Area Controller Intializaition
+    AreaController area_controller = new AreaController();
+
+    // Attachements Controller Intializaition
+    AttachementsController attachements_controller = new AttachementsController();
+
+    // Sample Controller Intialization
+    SampleController sample_controller = new SampleController();
+
     // Current Date Intializaition
-    Date currentDate;
+    Date current_date;
 
-    // User Authentication Intializaition
-    AuthController auth = new AuthController();
+    private List<Request> requests_list;
 
-    private void Start() {
+    private List<Sample> samples_list;
 
-        MEWANavigation.setVisible(true);
-    }
+    private String sample_category = "";
 
-    private void MoveTo(JPanel o1, JPanel o2) {
-        o1.setVisible(false);
-        o2.setVisible(true);
+    private JFileChooser fileChooser;
+    private File[] files;
+    private File file;
+
+    // Add these variables to the class declaration
+    private JScrollPane chatScrollPane;
+    private JPanel messagesPanel;
+
+    public MEWA() {
+        initComponents();
+
+        Start();
+
+        CustomeEdits();
+
+        switchLanguage();
+
+        setupChat();
     }
 
     /**
@@ -63,109 +153,281 @@ public class MEWA extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenu1 = new javax.swing.JMenu();
         PanelHome = new javax.swing.JPanel();
-        BtnSignOut = new javax.swing.JButton();
         BtnSupport = new javax.swing.JLabel();
-        BtnSetting = new javax.swing.JLabel();
-        BtnUserProfile = new javax.swing.JLabel();
-        MEWANavigation = new javax.swing.JPanel();
-        nav_request_area = new javax.swing.JLabel();
-        nav_areas = new javax.swing.JLabel();
-        starRating = new green.ams.components.StarRating();
-
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("green/ams/Bundle"); // NOI18N
-        jMenu1.setText(bundle.getString("MEWA.jMenu1.text")); // NOI18N
+        UserNavigation = new javax.swing.JPanel();
+        nav_rate = new javax.swing.JLabel();
+        nav_location = new javax.swing.JLabel();
+        BtnSupport1 = new javax.swing.JLabel();
+        PanelConsultant = new javax.swing.JPanel();
+        PanelConsultantHeader = new javax.swing.JPanel();
+        PanelTitle3 = new javax.swing.JLabel();
+        nav_back3 = new javax.swing.JLabel();
+        PanelConsultantionContainer = new javax.swing.JPanel();
+        PanelControllers1 = new javax.swing.JPanel();
+        LblConsultationTopic = new javax.swing.JLabel();
+        TFConsultationTopic = new javax.swing.JTextField();
+        BtnTopic = new javax.swing.JButton();
+        PanelChatBody = new javax.swing.JPanel();
+        PanelControllers = new javax.swing.JPanel();
+        TFMessage = new javax.swing.JTextField();
+        BtnMessageSend = new green.ams.components.GButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle(bundle.getString("MEWA.title")); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("green/ams/Bundle"); // NOI18N
+        setTitle(bundle.getString("MEWA.title_1")); // NOI18N
         setBackground(new java.awt.Color(237, 233, 224));
         setForeground(new java.awt.Color(237, 233, 224));
         setMinimumSize(new java.awt.Dimension(1366, 768));
         setName("AppJFrame"); // NOI18N
         setResizable(false);
+        getContentPane().setLayout(null);
 
         PanelHome.setBackground(new java.awt.Color(245, 255, 243));
         PanelHome.setMaximumSize(new java.awt.Dimension(1366, 768));
         PanelHome.setMinimumSize(new java.awt.Dimension(1366, 768));
-        PanelHome.setPreferredSize(new java.awt.Dimension(1366, 776));
+        PanelHome.setPreferredSize(new java.awt.Dimension(1366, 768));
         PanelHome.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BtnSignOut.setBackground(new java.awt.Color(204, 255, 204));
-        BtnSignOut.setFont(new java.awt.Font("Traditional Arabic", 1, 12)); // NOI18N
-        BtnSignOut.setText(bundle.getString("MEWA.BtnSignOut.text")); // NOI18N
-        BtnSignOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnSignOutActionPerformed(evt);
-            }
-        });
-        PanelHome.add(BtnSignOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
-        BtnSupport.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        BtnSupport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/support-removebg-preview.png"))); // NOI18N
-        BtnSupport.setText(bundle.getString("MEWA.BtnSupport.text")); // NOI18N
+        BtnSupport.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        BtnSupport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/rope-tree-removebg-preview.png"))); // NOI18N
+        BtnSupport.setText(bundle.getString("MEWA.BtnSupport.text_1")); // NOI18N
         BtnSupport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnSupport.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        PanelHome.add(BtnSupport, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 660, 280, 60));
+        PanelHome.add(BtnSupport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 220));
 
-        BtnSetting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/user-removebg-preview.png"))); // NOI18N
-        BtnSetting.setText(bundle.getString("MEWA.BtnSetting.text")); // NOI18N
-        BtnSetting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        PanelHome.add(BtnSetting, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 10, 70, 70));
+        UserNavigation.setBackground(new java.awt.Color(245, 255, 243));
+        UserNavigation.setMinimumSize(new java.awt.Dimension(500, 500));
+        UserNavigation.setPreferredSize(new java.awt.Dimension(1350, 330));
+        UserNavigation.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 20));
 
-        BtnUserProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/settings-removebg-preview.png"))); // NOI18N
-        BtnUserProfile.setText(bundle.getString("MEWA.BtnUserProfile.text")); // NOI18N
-        BtnUserProfile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        PanelHome.add(BtnUserProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 10, 70, 70));
+        nav_rate.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_rate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/rate-removebg-preview.png"))); // NOI18N
+        nav_rate.setText(bundle.getString("MEWA.nav_rate.text")); // NOI18N
+        nav_rate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_rate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_rate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_rate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_rateMouseClicked(evt);
+            }
+        });
+        UserNavigation.add(nav_rate);
 
-        MEWANavigation.setBackground(new java.awt.Color(245, 255, 243));
-        MEWANavigation.setMinimumSize(new java.awt.Dimension(500, 500));
-        MEWANavigation.setPreferredSize(new java.awt.Dimension(1350, 330));
-        MEWANavigation.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 20));
+        nav_location.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_location.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/images-gallery-removebg-preview.png"))); // NOI18N
+        nav_location.setText(bundle.getString("MEWA.nav_location.text")); // NOI18N
+        nav_location.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_location.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_location.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_location.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_locationMouseClicked(evt);
+            }
+        });
+        UserNavigation.add(nav_location);
 
-        nav_request_area.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
-        nav_request_area.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/rate-removebg-preview.png"))); // NOI18N
-        nav_request_area.setText(bundle.getString("MEWA.nav_request_area.text")); // NOI18N
-        nav_request_area.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_request_area.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_request_area.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        MEWANavigation.add(nav_request_area);
+        PanelHome.add(UserNavigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 210, 640, -1));
 
-        nav_areas.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
-        nav_areas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/consultant-removebg-preview.png"))); // NOI18N
-        nav_areas.setText(bundle.getString("MEWA.nav_areas.text")); // NOI18N
-        nav_areas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_areas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_areas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        MEWANavigation.add(nav_areas);
+        BtnSupport1.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        BtnSupport1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/cliff-removebg-preview.png"))); // NOI18N
+        BtnSupport1.setText(bundle.getString("MEWA.BtnSupport1.text")); // NOI18N
+        BtnSupport1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnSupport1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        PanelHome.add(BtnSupport1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 450, 260, 280));
 
-        PanelHome.add(MEWANavigation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 1350, -1));
-        PanelHome.add(starRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, -1, -1));
+        getContentPane().add(PanelHome);
+        PanelHome.setBounds(0, 0, 1366, 730);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        PanelConsultant.setBackground(new java.awt.Color(237, 239, 230));
+        PanelConsultant.setEnabled(false);
+        PanelConsultant.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelConsultant.setLayout(new java.awt.BorderLayout());
+
+        PanelConsultantHeader.setBackground(new java.awt.Color(203, 225, 196));
+        PanelConsultantHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        PanelConsultantHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle3.setBackground(new java.awt.Color(203, 225, 196));
+        PanelTitle3.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle3.setText(bundle.getString("MEWA.PanelTitle3.text")); // NOI18N
+        PanelConsultantHeader.add(PanelTitle3, java.awt.BorderLayout.CENTER);
+
+        nav_back3.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        nav_back3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/back-icon-removebg-preview.png"))); // NOI18N
+        nav_back3.setText(bundle.getString("MEWA.nav_back3.text")); // NOI18N
+        nav_back3.setAlignmentX(0.5F);
+        nav_back3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
+        nav_back3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_back3.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        nav_back3.setMaximumSize(new java.awt.Dimension(122, 100));
+        nav_back3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_back3MouseClicked(evt);
+            }
+        });
+        PanelConsultantHeader.add(nav_back3, java.awt.BorderLayout.LINE_END);
+
+        PanelConsultant.add(PanelConsultantHeader, java.awt.BorderLayout.PAGE_START);
+
+        PanelConsultantionContainer.setBackground(new java.awt.Color(237, 239, 230));
+        PanelConsultantionContainer.setPreferredSize(new java.awt.Dimension(1366, 588));
+        PanelConsultantionContainer.setLayout(new java.awt.BorderLayout());
+
+        PanelControllers1.setOpaque(false);
+        PanelControllers1.setPreferredSize(new java.awt.Dimension(1366, 50));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 5);
+        flowLayout1.setAlignOnBaseline(true);
+        PanelControllers1.setLayout(flowLayout1);
+
+        LblConsultationTopic.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        LblConsultationTopic.setText(bundle.getString("MEWA.LblConsultationTopic.text")); // NOI18N
+        PanelControllers1.add(LblConsultationTopic);
+
+        TFConsultationTopic.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TFConsultationTopic.setText(bundle.getString("MEWA.TFConsultationTopic.text")); // NOI18N
+        TFConsultationTopic.setToolTipText(bundle.getString("MEWA.TFConsultationTopic.toolTipText")); // NOI18N
+        TFConsultationTopic.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TFConsultationTopic.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        TFConsultationTopic.setEnabled(false);
+        TFConsultationTopic.setMaximumSize(new java.awt.Dimension(100, 200));
+        TFConsultationTopic.setPreferredSize(new java.awt.Dimension(600, 35));
+        TFConsultationTopic.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TFConsultationTopicFocusGained(evt);
+            }
+        });
+        PanelControllers1.add(TFConsultationTopic);
+
+        BtnTopic.setFont(new java.awt.Font("Traditional Arabic", 1, 14)); // NOI18N
+        BtnTopic.setText(bundle.getString("MEWA.BtnTopic.text")); // NOI18N
+        BtnTopic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTopicActionPerformed(evt);
+            }
+        });
+        PanelControllers1.add(BtnTopic);
+
+        PanelConsultantionContainer.add(PanelControllers1, java.awt.BorderLayout.NORTH);
+
+        PanelChatBody.setMaximumSize(new java.awt.Dimension(32767, 500));
+        PanelChatBody.setOpaque(false);
+        PanelChatBody.setPreferredSize(new java.awt.Dimension(1366, 573));
+
+        javax.swing.GroupLayout PanelChatBodyLayout = new javax.swing.GroupLayout(PanelChatBody);
+        PanelChatBody.setLayout(PanelChatBodyLayout);
+        PanelChatBodyLayout.setHorizontalGroup(
+            PanelChatBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1366, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelHome, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE)
+        PanelChatBodyLayout.setVerticalGroup(
+            PanelChatBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
+
+        PanelConsultantionContainer.add(PanelChatBody, java.awt.BorderLayout.CENTER);
+
+        PanelControllers.setOpaque(false);
+        PanelControllers.setPreferredSize(new java.awt.Dimension(1366, 90));
+        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout();
+        flowLayout2.setAlignOnBaseline(true);
+        PanelControllers.setLayout(flowLayout2);
+
+        TFMessage.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
+        TFMessage.setText(bundle.getString("MEWA.TFMessage.text")); // NOI18N
+        TFMessage.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
+        TFMessage.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        TFMessage.setMaximumSize(new java.awt.Dimension(100, 200));
+        TFMessage.setPreferredSize(new java.awt.Dimension(1200, 35));
+        TFMessage.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TFMessageFocusGained(evt);
+            }
+        });
+        PanelControllers.add(TFMessage);
+
+        BtnMessageSend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/send-icon-removebg-preview.png"))); // NOI18N
+        BtnMessageSend.setText(bundle.getString("MEWA.BtnMessageSend.text")); // NOI18N
+        BtnMessageSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnMessageSendActionPerformed(evt);
+            }
+        });
+        PanelControllers.add(BtnMessageSend);
+
+        PanelConsultantionContainer.add(PanelControllers, java.awt.BorderLayout.SOUTH);
+
+        PanelConsultant.add(PanelConsultantionContainer, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(PanelConsultant);
+        PanelConsultant.setBounds(0, 0, 1366, 730);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSignOutActionPerformed
+    private void nav_rateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_rateMouseClicked
         // TODO add your handling code here:
 
-        user = null;
-        this.dispose();
-        app = new APP();
-        app.setVisible(true);
 
-    }//GEN-LAST:event_BtnSignOutActionPerformed
+    }//GEN-LAST:event_nav_rateMouseClicked
+
+    private void nav_locationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_locationMouseClicked
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_nav_locationMouseClicked
+
+    private void nav_back3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back3MouseClicked
+        // TODO add your handling code here:
+
+        TFConsultationTopic.disable();
+
+        MoveTo(PanelConsultant, PanelHome);
+    }//GEN-LAST:event_nav_back3MouseClicked
+
+    private void TFConsultationTopicFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TFConsultationTopicFocusGained
+        // TODO add your handling code here:
+
+        if (TFConsultationTopic.getText().equals("Write your topic here")) {
+            TFConsultationTopic.setText("");
+        }
+    }//GEN-LAST:event_TFConsultationTopicFocusGained
+
+    private void BtnTopicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTopicActionPerformed
+        // TODO add your handling code here:
+
+        if (BtnTopic.getText().equals("Save")) {
+
+            TFConsultationTopic.disable();
+
+            BtnTopic.setText("Change");
+        } else {
+            TFConsultationTopic.enable();
+
+            TFConsultationTopic.setFocusable(true);
+
+            BtnTopic.setText("Save");
+
+        }
+    }//GEN-LAST:event_BtnTopicActionPerformed
+
+    private void TFMessageFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TFMessageFocusGained
+        // TODO add your handling code here:
+
+        if (TFMessage.getText().equals("Write your message here")) {
+            TFMessage.setText("");
+        }
+    }//GEN-LAST:event_TFMessageFocusGained
+
+    private void BtnMessageSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnMessageSendActionPerformed
+        // TODO add your handling code here:
+
+        sendMessage();
+    }//GEN-LAST:event_BtnMessageSendActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,17 +467,42 @@ public class MEWA extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel BtnSetting;
-    private javax.swing.JButton BtnSignOut;
+    private green.ams.components.GButton BtnMessageSend;
     private javax.swing.JLabel BtnSupport;
-    private javax.swing.JLabel BtnUserProfile;
-    private javax.swing.JPanel MEWANavigation;
+    private javax.swing.JLabel BtnSupport1;
+    private javax.swing.JButton BtnTopic;
+    private javax.swing.JLabel LblConsultationTopic;
+    private javax.swing.JPanel PanelChatBody;
+    private javax.swing.JPanel PanelConsultant;
+    private javax.swing.JPanel PanelConsultantHeader;
+    private javax.swing.JPanel PanelConsultantionContainer;
+    private javax.swing.JPanel PanelControllers;
+    private javax.swing.JPanel PanelControllers1;
     private javax.swing.JPanel PanelHome;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JLabel nav_areas;
-    private javax.swing.JLabel nav_request_area;
-    private green.ams.components.StarRating starRating;
+    private javax.swing.JLabel PanelTitle3;
+    private javax.swing.JTextField TFConsultationTopic;
+    private javax.swing.JTextField TFMessage;
+    private javax.swing.JPanel UserNavigation;
+    private javax.swing.JLabel nav_back3;
+    private javax.swing.JLabel nav_location;
+    private javax.swing.JLabel nav_rate;
     // End of variables declaration//GEN-END:variables
+
+    private void Start() {
+
+        PanelHome.setVisible(true);
+        PanelConsultant.setVisible(false);
+
+    }
+
+    private void CustomeEdits() {
+
+    }
+
+    private void MoveTo(JPanel o1, JPanel o2) {
+        o1.setVisible(false);
+        o2.setVisible(true);
+    }
 
     private void switchLanguage() {
 
@@ -223,7 +510,113 @@ public class MEWA extends javax.swing.JFrame {
         GLOBAL.bundle = ResourceBundle.getBundle("green.ams.Bundle", GLOBAL.currentLocale);
 
         // Update UI Components
-        GLOBAL.updateTextFields(this, "USER", GLOBAL.bundle);
+        GLOBAL.updateTextFields(this, "MEWA", GLOBAL.bundle);
+    }
+
+    // Add this method to set up the chat UI
+    private void setupChat() {
+        messagesPanel = new JPanel();
+        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+        messagesPanel.setBackground(new Color(237, 239, 230));
+
+        chatScrollPane = new JScrollPane(messagesPanel);
+        chatScrollPane.setBorder(null);
+        chatScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        chatScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        // Replace the existing PanelChatBody layout
+        PanelChatBody.setLayout(new BorderLayout());
+        PanelChatBody.removeAll();
+        PanelChatBody.add(chatScrollPane, BorderLayout.CENTER);
+        PanelChatBody.revalidate();
+        PanelChatBody.repaint();
+
+        // Add action listeners for sending messages
+        BtnMessageSend.addActionListener(e -> sendMessage());
+        TFMessage.addActionListener(e -> sendMessage());
+    }
+
+    // Add this method to handle message sending
+    private void sendMessage() {
+        String text = TFMessage.getText().trim();
+        if (!text.isEmpty()) {
+            addMessage(text, true); // User message
+            TFMessage.setText("");
+
+            // Simulate consultant reply after 1 second
+            new Timer(1000, evt -> {
+                addMessage(user_controller.getMessages(GLOBAL.user_id, text), false);
+                ((Timer) evt.getSource()).stop();
+            }).start();
+        }
+    }
+
+    // Add this method to create message bubbles
+    private void addMessage(String text, boolean isUser) {
+        String topic = (!TFConsultationTopic.getText().isEmpty()
+                && !TFConsultationTopic.getText().equals("Write your topic here"))
+                ? TFConsultationTopic.getText()
+                : "Public Chat";
+
+        consultation = new Consultation();
+        consultation.setUser_id(GLOBAL.user_id);
+        consultation.setTopic(topic);
+        consultation.setMessage(text);
+
+        JPanel wrapperPanel = new JPanel(new BorderLayout());
+        wrapperPanel.setOpaque(false);  // matches background
+        JPanel bubble = createResponsiveBubble(text, isUser);
+
+        if (isUser) {
+            wrapperPanel.add(bubble, BorderLayout.EAST);
+        } else {
+            wrapperPanel.add(bubble, BorderLayout.WEST);
+        }
+
+        wrapperPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        messagesPanel.add(wrapperPanel);
+        messagesPanel.add(Box.createVerticalStrut(8));
+
+        messagesPanel.revalidate();
+        messagesPanel.repaint();
+
+        SwingUtilities.invokeLater(() -> {
+            JScrollBar vertical = chatScrollPane.getVerticalScrollBar();
+            vertical.setValue(vertical.getMaximum());
+        });
+
+        user_controller.Consultation(consultation);
+
+    }
+
+    private JPanel createResponsiveBubble(String text, boolean isUser) {
+        JTextArea messageText = new JTextArea(text);
+        messageText.setLineWrap(true);
+        messageText.setWrapStyleWord(true);
+        messageText.setEditable(false);
+        messageText.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        messageText.setBackground(isUser ? new Color(203, 225, 196) : Color.WHITE);
+        messageText.setForeground(Color.DARK_GRAY);
+        messageText.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+
+        JPanel bubble = new JPanel(new BorderLayout());
+        bubble.setOpaque(true);
+        bubble.setBackground(messageText.getBackground());
+        bubble.add(messageText, BorderLayout.CENTER);
+
+        bubble.setBorder(BorderFactory.createCompoundBorder(
+                new RoundedBorder(12),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+
+        // Responsive width calculation
+        int maxWidth = (int) (chatScrollPane.getViewport().getWidth() * 0.6); // 60% of available width
+        messageText.setMaximumSize(new Dimension(maxWidth, Integer.MAX_VALUE));
+
+        // Let messageText expand as wide as needed
+        messageText.setPreferredSize(new Dimension(maxWidth, messageText.getPreferredSize().height));
+
+        return bubble;
     }
 
 }
