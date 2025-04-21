@@ -5,36 +5,35 @@
  */
 package green.ams;
 
-import green.ams.components.CartItem;
-import green.ams.components.StarRating;
-import green.ams.components.Item;
-import green.ams.components.RequestArea;
-import green.ams.components.RoundedBorder;
-import green.ams.components.WrapLayout;
-import green.ams.controllers.AreaController;
 import green.ams.controllers.AttachementsController;
 import green.ams.controllers.SampleController;
+import green.ams.controllers.AreaController;
 import green.ams.controllers.UserController;
-import green.ams.models.Area;
+import green.ams.components.RoundedBorder;
+import green.ams.components.RequestArea;
+import green.ams.components.StarRating;
+import green.ams.components.WrapLayout;
+import green.ams.components.CartItem;
 import green.ams.models.Attachements;
 import green.ams.models.Consultation;
-import green.ams.models.Evaluate;
-import green.ams.models.Feedback;
-import green.ams.models.Order;
+import java.awt.image.BufferedImage;
+import green.ams.models.SampleItem;
 import green.ams.models.OrderItem;
+import java.awt.HeadlessException;
+import green.ams.models.Feedback;
+import green.ams.models.Evaluate;
+import green.ams.components.Item;
 import green.ams.models.Request;
 import green.ams.models.Sample;
-import green.ams.models.SampleItem;
+import green.ams.models.Order;
 import green.ams.models.User;
+import green.ams.models.Area;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
@@ -50,16 +49,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 /**
  *
@@ -74,7 +70,6 @@ public class USER extends javax.swing.JFrame {
      */
     // Validation patterns
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[+]?[0-9]{10,13}$");
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
 
     // APP Frame Intialization
     APP app;
@@ -183,7 +178,6 @@ public class USER extends javax.swing.JFrame {
         BtnCancel = new javax.swing.JButton();
         BtnSupportSubmit = new javax.swing.JButton();
         PanelHome = new javax.swing.JPanel();
-        BtnSignOut = new javax.swing.JButton();
         BtnSupport = new javax.swing.JLabel();
         BtnUserProfile = new javax.swing.JLabel();
         BtnSettings = new javax.swing.JLabel();
@@ -229,6 +223,13 @@ public class USER extends javax.swing.JFrame {
         PanelButtons1 = new javax.swing.JPanel();
         BtnSave = new javax.swing.JButton();
         BtnBack1 = new javax.swing.JButton();
+        PanelSettings = new javax.swing.JPanel();
+        PanelSettingsHeader = new javax.swing.JPanel();
+        PanelTitle5 = new javax.swing.JLabel();
+        nav_back8 = new javax.swing.JLabel();
+        PanelSeetingsBody = new javax.swing.JPanel();
+        BtnDeleteAccount = new javax.swing.JButton();
+        BtnSignOut = new javax.swing.JButton();
         PanelPublicLocations = new javax.swing.JPanel();
         PanelPublicLocationHeader = new javax.swing.JPanel();
         PanelTitle1 = new javax.swing.JLabel();
@@ -456,10 +457,10 @@ public class USER extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 436, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addComponent(TFSupportTopic, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                    .addComponent(TFSupportTopic, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel5Layout.setVerticalGroup(
@@ -475,11 +476,11 @@ public class USER extends javax.swing.JFrame {
         PanelSupportForm4.add(jPanel5);
 
         TASupportMessage.setColumns(20);
+        TASupportMessage.setFont(new java.awt.Font("Traditional Arabic", 1, 12)); // NOI18N
         TASupportMessage.setLineWrap(true);
         TASupportMessage.setRows(5);
         TASupportMessage.setText(bundle.getString("USER.TASupportMessage.text")); // NOI18N
         TASupportMessage.setWrapStyleWord(true);
-        TASupportMessage.setPreferredSize(new java.awt.Dimension(164, 100));
         TASupportMessage.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 TASupportMessageFocusGained(evt);
@@ -496,7 +497,8 @@ public class USER extends javax.swing.JFrame {
         PanelSupportButtons.setPreferredSize(new java.awt.Dimension(400, 50));
 
         BtnCancel.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
-        BtnCancel.setText(bundle.getString("USER.BtnCancel.text_1")); // NOI18N
+        BtnCancel.setText(bundle.getString("USER.BtnCancel.text")); // NOI18N
+        BtnCancel.setActionCommand(bundle.getString("USER.BtnCancel.actionCommand")); // NOI18N
         BtnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnCancelActionPerformed(evt);
@@ -505,7 +507,8 @@ public class USER extends javax.swing.JFrame {
 
         BtnSupportSubmit.setBackground(new java.awt.Color(102, 153, 0));
         BtnSupportSubmit.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
-        BtnSupportSubmit.setText(bundle.getString("USER.BtnSupportSubmit.text_1")); // NOI18N
+        BtnSupportSubmit.setText(bundle.getString("USER.BtnSupportSubmit.text")); // NOI18N
+        BtnSupportSubmit.setActionCommand(bundle.getString("USER.BtnSupportSubmit.actionCommand")); // NOI18N
         BtnSupportSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnSupportSubmitActionPerformed(evt);
@@ -517,11 +520,11 @@ public class USER extends javax.swing.JFrame {
         PanelSupportButtonsLayout.setHorizontalGroup(
             PanelSupportButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelSupportButtonsLayout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(BtnSupportSubmit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addGap(124, 124, 124)
+                .addComponent(BtnSupportSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(BtnCancel)
-                .addGap(73, 73, 73))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
         PanelSupportButtonsLayout.setVerticalGroup(
             PanelSupportButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -552,16 +555,6 @@ public class USER extends javax.swing.JFrame {
         PanelHome.setPreferredSize(new java.awt.Dimension(1366, 768));
         PanelHome.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BtnSignOut.setBackground(new java.awt.Color(204, 255, 204));
-        BtnSignOut.setFont(new java.awt.Font("Traditional Arabic", 1, 12)); // NOI18N
-        BtnSignOut.setText(bundle.getString("USER.BtnSignOut.text")); // NOI18N
-        BtnSignOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnSignOutActionPerformed(evt);
-            }
-        });
-        PanelHome.add(BtnSignOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
         BtnSupport.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
         BtnSupport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/support-removebg-preview.png"))); // NOI18N
         BtnSupport.setText(bundle.getString("USER.BtnSupport.text")); // NOI18N
@@ -587,6 +580,11 @@ public class USER extends javax.swing.JFrame {
         BtnSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/settings-removebg-preview.png"))); // NOI18N
         BtnSettings.setText(bundle.getString("USER.BtnSettings.text")); // NOI18N
         BtnSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnSettings.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BtnSettingsMouseClicked(evt);
+            }
+        });
         PanelHome.add(BtnSettings, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 10, 70, 60));
 
         UserNavigation.setBackground(new java.awt.Color(245, 255, 243));
@@ -960,6 +958,91 @@ public class USER extends javax.swing.JFrame {
 
         getContentPane().add(PanelUserProfile);
         PanelUserProfile.setBounds(0, 0, 1366, 768);
+
+        PanelSettings.setBackground(new java.awt.Color(245, 255, 243));
+        PanelSettings.setAlignmentX(0.15F);
+        PanelSettings.setEnabled(false);
+        PanelSettings.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelSettings.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelSettings.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelSettings.setLayout(new java.awt.BorderLayout(0, 30));
+
+        PanelSettingsHeader.setBackground(new java.awt.Color(203, 225, 196));
+        PanelSettingsHeader.setPreferredSize(new java.awt.Dimension(1366, 50));
+        PanelSettingsHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle5.setBackground(new java.awt.Color(203, 225, 196));
+        PanelTitle5.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle5.setText(bundle.getString("USER.PanelTitle5.text")); // NOI18N
+        PanelSettingsHeader.add(PanelTitle5, java.awt.BorderLayout.CENTER);
+
+        nav_back8.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        nav_back8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/back-icon-removebg-preview.png"))); // NOI18N
+        nav_back8.setText(bundle.getString("USER.nav_back8.text")); // NOI18N
+        nav_back8.setAlignmentX(0.5F);
+        nav_back8.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
+        nav_back8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_back8.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        nav_back8.setMaximumSize(new java.awt.Dimension(122, 100));
+        nav_back8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_back8MouseClicked(evt);
+            }
+        });
+        PanelSettingsHeader.add(nav_back8, java.awt.BorderLayout.LINE_END);
+
+        PanelSettings.add(PanelSettingsHeader, java.awt.BorderLayout.PAGE_START);
+
+        PanelSeetingsBody.setBackground(new java.awt.Color(255, 255, 255));
+        PanelSeetingsBody.setOpaque(false);
+
+        BtnDeleteAccount.setBackground(new java.awt.Color(255, 51, 51));
+        BtnDeleteAccount.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        BtnDeleteAccount.setForeground(new java.awt.Color(255, 255, 255));
+        BtnDeleteAccount.setText(bundle.getString("USER.BtnDeleteAccount.text")); // NOI18N
+        BtnDeleteAccount.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnDeleteAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDeleteAccountActionPerformed(evt);
+            }
+        });
+
+        BtnSignOut.setBackground(new java.awt.Color(204, 255, 204));
+        BtnSignOut.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        BtnSignOut.setText(bundle.getString("USER.BtnSignOut.text")); // NOI18N
+        BtnSignOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnSignOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSignOutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PanelSeetingsBodyLayout = new javax.swing.GroupLayout(PanelSeetingsBody);
+        PanelSeetingsBody.setLayout(PanelSeetingsBodyLayout);
+        PanelSeetingsBodyLayout.setHorizontalGroup(
+            PanelSeetingsBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelSeetingsBodyLayout.createSequentialGroup()
+                .addGap(484, 484, 484)
+                .addGroup(PanelSeetingsBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnDeleteAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnSignOut, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(486, Short.MAX_VALUE))
+        );
+        PanelSeetingsBodyLayout.setVerticalGroup(
+            PanelSeetingsBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelSeetingsBodyLayout.createSequentialGroup()
+                .addContainerGap(257, Short.MAX_VALUE)
+                .addComponent(BtnDeleteAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(BtnSignOut, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(262, 262, 262))
+        );
+
+        PanelSettings.add(PanelSeetingsBody, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(PanelSettings);
+        PanelSettings.setBounds(0, 0, 1366, 768);
 
         PanelPublicLocations.setBackground(new java.awt.Color(245, 255, 243));
         PanelPublicLocations.setEnabled(false);
@@ -1778,7 +1861,7 @@ public class USER extends javax.swing.JFrame {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
-        BtnCartClear.setText(bundle.getString("USER.BtnCartClear.text_1")); // NOI18N
+        BtnCartClear.setText(bundle.getString("USER.BtnCartClear.text")); // NOI18N
         BtnCartClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnCartClearActionPerformed(evt);
@@ -1824,7 +1907,7 @@ public class USER extends javax.swing.JFrame {
 
         BtnPay.setBackground(new java.awt.Color(238, 249, 235));
         BtnPay.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        BtnPay.setText(bundle.getString("USER.BtnPay.text_1")); // NOI18N
+        BtnPay.setText(bundle.getString("USER.BtnPay.text")); // NOI18N
         BtnPay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnPayActionPerformed(evt);
@@ -2178,15 +2261,12 @@ public class USER extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSignOutActionPerformed
+    private void BtnDeleteAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteAccountActionPerformed
         // TODO add your handling code here:
+        
+        JOptionPane.showMessageDialog(this, "User Account Deleted", "User Account Settings", JOptionPane.ERROR_MESSAGE);
 
-        user = null;
-        this.dispose();
-        app = new APP();
-        app.setVisible(true);
-
-    }//GEN-LAST:event_BtnSignOutActionPerformed
+    }//GEN-LAST:event_BtnDeleteAccountActionPerformed
 
     private void nav_rateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_rateMouseClicked
         // TODO add your handling code here:
@@ -2443,11 +2523,11 @@ public class USER extends javax.swing.JFrame {
 
     private void nav_suggested_indoorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_suggested_indoorMouseClicked
         // TODO add your handling code here:
-        
+
         if (GLOBAL.currentLocale.getLanguage().equals("en")) {
-            LblSampleShopTitle.setText("Indoor Suggested Samples"); 
-        }else{
-            LblSampleShopTitle.setText("العينات الداخلية المقترحة"); 
+            LblSampleShopTitle.setText("Indoor Suggested Samples");
+        } else {
+            LblSampleShopTitle.setText("العينات الداخلية المقترحة");
         }
         samplesShow("Indoor");
 
@@ -2499,19 +2579,36 @@ public class USER extends javax.swing.JFrame {
 
     private void BtnTopicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTopicActionPerformed
         // TODO add your handling code here:
+        if (GLOBAL.currentLocale.getLanguage().equals("en")) {
 
-        if (BtnTopic.getText().equals("Save")) {
+            if (BtnTopic.getText().equals("Save")) {
 
-            TFConsultationTopic.disable();
+                TFConsultationTopic.disable();
 
-            BtnTopic.setText("Change");
+                BtnTopic.setText("Change");
+            } else {
+                TFConsultationTopic.enable();
+
+                TFConsultationTopic.setFocusable(true);
+
+                BtnTopic.setText("Save");
+            }
+
         } else {
-            TFConsultationTopic.enable();
 
-            TFConsultationTopic.setFocusable(true);
+            if (BtnTopic.getText().equals("حفظ")) {
 
-            BtnTopic.setText("Save");
+                TFConsultationTopic.disable();
 
+                BtnTopic.setText("تغيير");
+            } else {
+                TFConsultationTopic.enable();
+
+                TFConsultationTopic.setFocusable(true);
+
+                BtnTopic.setText("حفظ");
+
+            }
         }
 
     }//GEN-LAST:event_BtnTopicActionPerformed
@@ -2593,7 +2690,7 @@ public class USER extends javax.swing.JFrame {
 
         PanelSamplesCartItem.revalidate();
         PanelSamplesCartItem.repaint();
-        
+
         BtnPay.enable();
 
         MoveTo(PanelSamplesShop, PanelSamplesCart);
@@ -2629,7 +2726,7 @@ public class USER extends javax.swing.JFrame {
 
     private void LblApplePayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblApplePayMouseClicked
 
-          // TODO add your handling code here:
+        // TODO add your handling code here:
         String payment_method = RBtnApplyPay.isSelected() ? "Apple Pay" : "Cash";
 
         order.setPayment_method(payment_method);
@@ -2637,9 +2734,9 @@ public class USER extends javax.swing.JFrame {
         user_controller.Order(order);
 
         LblOrderNumber.setText("رقم الطلب " + order.getOrder_number());
-        
+
         MoveTo(PanelPlaceOrder, PanelThanks);
-        
+
     }//GEN-LAST:event_LblApplePayMouseClicked
 
     private void LblOrderNumberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LblOrderNumberMouseClicked
@@ -2734,31 +2831,54 @@ public class USER extends javax.swing.JFrame {
     private void PanelBottom2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PanelBottom2MouseClicked
         // TODO add your handling code here:
 
-      
+
     }//GEN-LAST:event_PanelBottom2MouseClicked
 
     private void BtnCartClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCartClearActionPerformed
         // TODO add your handling code here:
-        
+
         if (sample_controller.removeAll()) {
             BtnPay.disable();
             MoveTo(PanelSamplesCart, PanelSamplesShop);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Fail");
         }
-        
+
     }//GEN-LAST:event_BtnCartClearActionPerformed
 
     private void BtnCartRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCartRefreshActionPerformed
         // TODO add your handling code here:
-                
+
     }//GEN-LAST:event_BtnCartRefreshActionPerformed
 
     private void BtnCartRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnCartRefreshMouseClicked
         // TODO add your handling code here:
         nav_cart1MouseClicked(evt);
-        
+
     }//GEN-LAST:event_BtnCartRefreshMouseClicked
+
+    private void nav_back8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back8MouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelSettings, PanelHome);
+
+    }//GEN-LAST:event_nav_back8MouseClicked
+
+    private void BtnSettingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnSettingsMouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelHome, PanelSettings);
+
+    }//GEN-LAST:event_BtnSettingsMouseClicked
+
+    private void BtnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSignOutActionPerformed
+        // TODO add your handling code here:
+        user = null;
+        this.dispose();
+        app = new APP();
+        app.setVisible(true);
+
+    }//GEN-LAST:event_BtnSignOutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2806,6 +2926,7 @@ public class USER extends javax.swing.JFrame {
     private javax.swing.JButton BtnChooseImages1;
     private javax.swing.JButton BtnCreate;
     private javax.swing.JButton BtnCreateSampeBack;
+    private javax.swing.JButton BtnDeleteAccount;
     private green.ams.components.GButton BtnMessageSend;
     private javax.swing.JButton BtnPay;
     private javax.swing.JButton BtnRateCancle;
@@ -2923,6 +3044,9 @@ public class USER extends javax.swing.JFrame {
     private javax.swing.JPanel PanelSamplesShop;
     private javax.swing.JPanel PanelSamplesShopContainer;
     private javax.swing.JPanel PanelSamplesShopHeader;
+    private javax.swing.JPanel PanelSeetingsBody;
+    private javax.swing.JPanel PanelSettings;
+    private javax.swing.JPanel PanelSettingsHeader;
     private javax.swing.JPanel PanelSupportButtons;
     private javax.swing.JPanel PanelSupportContaiiner4;
     private javax.swing.JPanel PanelSupportForm4;
@@ -2932,6 +3056,7 @@ public class USER extends javax.swing.JFrame {
     private javax.swing.JLabel PanelTitle2;
     private javax.swing.JLabel PanelTitle3;
     private javax.swing.JLabel PanelTitle4;
+    private javax.swing.JLabel PanelTitle5;
     private javax.swing.JPanel PanelUserProfile;
     private javax.swing.JRadioButton RBtnApplyPay;
     private javax.swing.JRadioButton RBtnCash;
@@ -2981,6 +3106,7 @@ public class USER extends javax.swing.JFrame {
     private javax.swing.JLabel nav_back5;
     private javax.swing.JLabel nav_back6;
     private javax.swing.JLabel nav_back7;
+    private javax.swing.JLabel nav_back8;
     private javax.swing.JLabel nav_cart1;
     private javax.swing.JLabel nav_consultant;
     private javax.swing.JLabel nav_create;
@@ -3003,6 +3129,7 @@ public class USER extends javax.swing.JFrame {
         PanelHome.setVisible(true);
         PanelFeedback.setVisible(false);
         PanelUserProfile.setVisible(false);
+        PanelSettings.setVisible(false);
         PanelPublicLocations.setVisible(false);
         PanelRequestedAreas.setVisible(false);
         PanelSamples.setVisible(false);

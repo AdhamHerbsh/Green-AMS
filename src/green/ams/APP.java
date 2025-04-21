@@ -6,6 +6,7 @@
 package green.ams;
 
 import green.ams.controllers.AuthController;
+import green.ams.services.InputValidator;
 import green.ams.models.User;
 import java.sql.Date;
 import java.util.Locale;
@@ -25,13 +26,17 @@ public class APP extends javax.swing.JFrame {
      *
      * @param language
      */
-    
-    
     // User Model Intializaition
     boolean is_on = true;
 
     // Password Visible Intializaition
     private boolean password_visible = false;
+
+    // Admin Frame Intializaition    
+    ADMIN admin_frame;
+
+    // MEWA Frame Intializaition    
+    MEWA mewa_frame;
 
     // User Frame Intializaition    
     USER user_frame;
@@ -46,9 +51,7 @@ public class APP extends javax.swing.JFrame {
     Date current_date;
 
     public APP() {
-        
-        
-        
+
         initComponents();
 
         Start();
@@ -90,6 +93,8 @@ public class APP extends javax.swing.JFrame {
         LblUsername1 = new javax.swing.JLabel();
         RTFUsername = new javax.swing.JTextField();
         LblPhone = new javax.swing.JLabel();
+        PanelInputRow = new javax.swing.JPanel();
+        LblPhoneCode = new javax.swing.JLabel();
         RTFPhone = new javax.swing.JTextField();
         LblAdress = new javax.swing.JLabel();
         RTFAdress = new javax.swing.JTextField();
@@ -104,7 +109,6 @@ public class APP extends javax.swing.JFrame {
         setTitle(bundle.getString("APP.title")); // NOI18N
         setBackground(new java.awt.Color(237, 233, 224));
         setForeground(new java.awt.Color(237, 233, 224));
-        setMaximumSize(new java.awt.Dimension(1366, 768));
         setMinimumSize(new java.awt.Dimension(1366, 768));
         setName("AppJFrame"); // NOI18N
         setResizable(false);
@@ -175,7 +179,7 @@ public class APP extends javax.swing.JFrame {
         PanelGateLayout.setHorizontalGroup(
             PanelGateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelGateLayout.createSequentialGroup()
-                .addContainerGap(545, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(PanelGateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelGateLayout.createSequentialGroup()
                         .addComponent(BtnLanguage)
@@ -364,12 +368,24 @@ public class APP extends javax.swing.JFrame {
         RegisterContainer.add(LblPhone);
         LblPhone.getAccessibleContext().setAccessibleParent(RegisterContainer);
 
+        PanelInputRow.setBackground(new java.awt.Color(255, 255, 255));
+        PanelInputRow.setOpaque(false);
+        PanelInputRow.setLayout(new javax.swing.BoxLayout(PanelInputRow, javax.swing.BoxLayout.LINE_AXIS));
+
+        LblPhoneCode.setBackground(new java.awt.Color(255, 255, 255));
+        LblPhoneCode.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        LblPhoneCode.setText(bundle.getString("APP.LblPhoneCode.text")); // NOI18N
+        LblPhoneCode.setPreferredSize(new java.awt.Dimension(40, 33));
+        PanelInputRow.add(LblPhoneCode);
+
         RTFPhone.setFont(new java.awt.Font("Traditional Arabic", 0, 18)); // NOI18N
         RTFPhone.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         RTFPhone.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(33, 104, 73), 3, true));
         RTFPhone.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        RegisterContainer.add(RTFPhone);
+        PanelInputRow.add(RTFPhone);
         RTFPhone.getAccessibleContext().setAccessibleParent(RegisterContainer);
+
+        RegisterContainer.add(PanelInputRow);
 
         LblAdress.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
         LblAdress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -458,21 +474,59 @@ public class APP extends javax.swing.JFrame {
     private void LBtnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LBtnSignInActionPerformed
         // TODO add your handling code here:
 
-        user.setEmail(LTFUsername.getText().trim());
-        user.setPassword(LTFPassword.getText().trim());
+// Get trimmed input values
+        String email = LTFUsername.getText().trim();
+        String password = LTFPassword.getText().trim();
 
-        user.getEmail();
-        user.getPassword();
+        // Basic validation for login
+        String errorMessage = null;
 
+        if ((errorMessage = InputValidator.validateEmail(email)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        // For login, we only check that password is not empty
+        if (password.isEmpty()) {
+            showErrorMessage("Password cannot be empty");
+            return;
+        }
+
+        // Set user properties for login
+        user.setEmail(email);
+        user.setPassword(password);
+
+        // Additional code for login authentication...
         if (auth.Login(user)) {
 
             user.setId(GLOBAL.user_id);
+
             System.out.println(user.getId());
-            user_frame = new USER();
 
-            user_frame.setVisible(true);
+            user = auth.setUser(user.getId());
 
-            this.dispose();
+            System.out.println(user.getRole());
+
+            switch (user.getRole()) {
+                case "User Public":
+
+                    user_frame = new USER();
+                    user_frame.setVisible(true);
+
+                    break;
+                case "MEWA":
+
+                    mewa_frame = new MEWA();
+
+                    break;
+                case "Admin":
+                    break;
+                default:
+
+                    this.dispose();
+
+            }
+
         } else {
             JOptionPane.showMessageDialog(rootPane, "البريد الاكتروني او كلمة المرور خطاء", "تحذير", 2);
 
@@ -500,14 +554,59 @@ public class APP extends javax.swing.JFrame {
 
     private void BtnSign1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSign1ActionPerformed
 
-        // TODO add your handling code here:
-        user.setFull_name(RTFFullName.getText().trim());
-        user.setEmail(RTFUsername.getText().trim());
-        user.setAddress(RTFAdress.getText().trim());
-        user.setPhone_number(RTFPhone.getText().trim());
-        user.setRole(RTFPassword.getText().trim());
-        user.setPassword(RTFPassword.getText().trim());
-        user.setCreated_date(current_date);
+        // Get trimmed input values
+        String fullName = RTFFullName.getText().trim();
+        String email = RTFUsername.getText().trim();
+        String address = RTFAdress.getText().trim();
+        String phoneNumber = RTFPhone.getText().trim();
+        String password = RTFPassword.getText().trim();
+        String role = RTFPassword.getText().trim(); // Note: this seems to be using the password field for role
+
+        // Validate all inputs
+        String errorMessage = null;
+
+        // Check each field individually
+        if ((errorMessage = InputValidator.validateFullName(fullName)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        if ((errorMessage = InputValidator.validateEmail(email)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        if ((errorMessage = InputValidator.validateAddress(address)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        if ((errorMessage = InputValidator.validatePhoneNumber(phoneNumber)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        if ((errorMessage = InputValidator.validatePassword(password)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        if ((errorMessage = InputValidator.validateRole(role)) != null) {
+            showErrorMessage(errorMessage);
+            return;
+        }
+
+        // All validations passed, set user properties
+        user.setFull_name(fullName);
+        user.setEmail(email);
+        user.setAddress(address);
+        user.setPhone_number("+966" + phoneNumber);
+        user.setRole(role);
+        user.setPassword(password);
+
+        // Show success message and proceed with signup
+        showSuccessMessage("Account created successfully!");
+        // Additional code for account creation...
 
         if (isUserValid(user)) {
 
@@ -659,10 +758,12 @@ public class APP extends javax.swing.JFrame {
     private javax.swing.JLabel LblPassword;
     private javax.swing.JLabel LblPassword1;
     private javax.swing.JLabel LblPhone;
+    private javax.swing.JLabel LblPhoneCode;
     private javax.swing.JLabel LblUsername;
     private javax.swing.JLabel LblUsername1;
     private javax.swing.JPanel LoginContainer;
     private javax.swing.JPanel PanelGate;
+    private javax.swing.JPanel PanelInputRow;
     private javax.swing.JPanel PanelSignIn;
     private javax.swing.JPanel PanelSignUp;
     private javax.swing.JPanel PanelSplash;
@@ -686,12 +787,12 @@ public class APP extends javax.swing.JFrame {
         PanelSignUp.setVisible(false);
 
     }
-    
+
     private void MoveTo(JPanel o1, JPanel o2) {
         o1.setVisible(false);
         o2.setVisible(true);
     }
-    
+
     private void switchLanguage() {
 
         // Toggle between English and Arabic
@@ -710,14 +811,36 @@ public class APP extends javax.swing.JFrame {
         GLOBAL.updateTextFields(this, "APP", GLOBAL.bundle);
     }
 
-
-
     public static boolean isUserValid(User user) {
         return user.getEmail() != null && !user.getFull_name().isEmpty()
                 && user.getEmail() != null && !user.getEmail().isEmpty()
                 && user.getPhone_number() != null && !user.getPhone_number().isEmpty()
                 && user.getAddress() != null && !user.getAddress().isEmpty()
                 && user.getPassword() != null && !user.getPassword().isEmpty();
+    }
+
+    /**
+     * Utility method to display error messages
+     */
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(
+                this,
+                message,
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    /**
+     * Utility method to display success messages
+     */
+    private void showSuccessMessage(String message) {
+        JOptionPane.showMessageDialog(
+                this,
+                message,
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
 }

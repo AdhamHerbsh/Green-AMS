@@ -25,6 +25,9 @@ public class AuthController {
     
     }
     
+    public User setUser(int id){
+        return user_dao.getUser(id);
+    }
 
     public boolean Login(User user) {
         return user_dao.checkUser(user);

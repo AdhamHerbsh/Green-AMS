@@ -34,7 +34,7 @@ import javax.swing.JScrollPane;
  *
  * @author Adham
  */
-public class SampleDAO {
+public class SampleDAO extends DAO{
 
     private dbhelper db;
     private JPanel imagePanel;
@@ -252,24 +252,4 @@ public class SampleDAO {
         }
         return success;
     }
-    
-    
-    private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (prepStmt != null) {
-                prepStmt.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Error closing resources: " + e.getMessage());
-        }
-    }
-
-
-
 }

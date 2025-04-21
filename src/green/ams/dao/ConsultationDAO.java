@@ -12,12 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Adham
  */
-public class ConsultationDAO {
+public class ConsultationDAO extends DAO {
 
     private dbhelper db;
     private Connection conn;
@@ -70,14 +72,15 @@ public class ConsultationDAO {
         return success;
     }
 
+
     public String getReply(int user_id, String text) {
         String reply = "";
         String sql = "SELECT Reply FROM consultations WHERE UserID = ? AND Message = ? ORDER BY SendedDate DESC LIMIT 1";
 
         try {
-            
+
             pst = conn.prepareStatement(sql);
-            
+
             pst.setInt(1, user_id);
             pst.setString(2, text);
             ResultSet rs = pst.executeQuery();
@@ -94,21 +97,4 @@ public class ConsultationDAO {
 
         return reply;
     }
-
-    private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (prepStmt != null) {
-                prepStmt.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Error closing resources: " + e.getMessage());
-        }
-    }
-
 }

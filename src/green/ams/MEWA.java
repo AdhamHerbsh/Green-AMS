@@ -156,9 +156,17 @@ public class MEWA extends javax.swing.JFrame {
         PanelHome = new javax.swing.JPanel();
         BtnSupport = new javax.swing.JLabel();
         UserNavigation = new javax.swing.JPanel();
-        nav_rate = new javax.swing.JLabel();
+        nav_request_areas = new javax.swing.JLabel();
         nav_location = new javax.swing.JLabel();
         BtnSupport1 = new javax.swing.JLabel();
+        PanelRequestedAreas = new javax.swing.JPanel();
+        RequestedPanelHeader = new javax.swing.JPanel();
+        PanelTitle4 = new javax.swing.JLabel();
+        nav_back5 = new javax.swing.JLabel();
+        contentPanel = new javax.swing.JPanel();
+        ScrollRequestsPane = new javax.swing.JScrollPane();
+        PanelRequestsItem = new green.ams.components.PanelItem();
+        requestArea1 = new green.ams.components.RequestArea();
         PanelConsultant = new javax.swing.JPanel();
         PanelConsultantHeader = new javax.swing.JPanel();
         PanelTitle3 = new javax.swing.JLabel();
@@ -194,25 +202,25 @@ public class MEWA extends javax.swing.JFrame {
         BtnSupport.setText(bundle.getString("MEWA.BtnSupport.text_1")); // NOI18N
         BtnSupport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnSupport.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        PanelHome.add(BtnSupport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 220));
+        PanelHome.add(BtnSupport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, -1));
 
         UserNavigation.setBackground(new java.awt.Color(245, 255, 243));
         UserNavigation.setMinimumSize(new java.awt.Dimension(500, 500));
         UserNavigation.setPreferredSize(new java.awt.Dimension(1350, 330));
         UserNavigation.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 20));
 
-        nav_rate.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_rate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/rate-removebg-preview.png"))); // NOI18N
-        nav_rate.setText(bundle.getString("MEWA.nav_rate.text")); // NOI18N
-        nav_rate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_rate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_rate.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_rate.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_request_areas.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_request_areas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/rate-removebg-preview.png"))); // NOI18N
+        nav_request_areas.setText(bundle.getString("MEWA.nav_request_areas.text")); // NOI18N
+        nav_request_areas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_request_areas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_request_areas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_request_areas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_rateMouseClicked(evt);
+                nav_request_areasMouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_rate);
+        UserNavigation.add(nav_request_areas);
 
         nav_location.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
         nav_location.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/images-gallery-removebg-preview.png"))); // NOI18N
@@ -238,6 +246,64 @@ public class MEWA extends javax.swing.JFrame {
 
         getContentPane().add(PanelHome);
         PanelHome.setBounds(0, 0, 1366, 730);
+
+        PanelRequestedAreas.setBackground(new java.awt.Color(237, 239, 230));
+        PanelRequestedAreas.setEnabled(false);
+        PanelRequestedAreas.setMaximumSize(new java.awt.Dimension(1366, 768));
+        PanelRequestedAreas.setMinimumSize(new java.awt.Dimension(1366, 768));
+        PanelRequestedAreas.setPreferredSize(new java.awt.Dimension(1366, 768));
+        PanelRequestedAreas.setLayout(new java.awt.BorderLayout());
+
+        RequestedPanelHeader.setBackground(new java.awt.Color(203, 225, 196));
+        RequestedPanelHeader.setPreferredSize(new java.awt.Dimension(0, 50));
+        RequestedPanelHeader.setLayout(new java.awt.BorderLayout());
+
+        PanelTitle4.setFont(new java.awt.Font("Traditional Arabic", 1, 36)); // NOI18N
+        PanelTitle4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelTitle4.setText(bundle.getString("MEWA.PanelTitle4.text")); // NOI18N
+        RequestedPanelHeader.add(PanelTitle4, java.awt.BorderLayout.CENTER);
+
+        nav_back5.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        nav_back5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/back-icon-removebg-preview.png"))); // NOI18N
+        nav_back5.setText(bundle.getString("MEWA.nav_back5.text")); // NOI18N
+        nav_back5.setAlignmentX(0.5F);
+        nav_back5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
+        nav_back5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_back5.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        nav_back5.setMaximumSize(new java.awt.Dimension(122, 100));
+        nav_back5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nav_back5MouseClicked(evt);
+            }
+        });
+        RequestedPanelHeader.add(nav_back5, java.awt.BorderLayout.LINE_END);
+
+        PanelRequestedAreas.add(RequestedPanelHeader, java.awt.BorderLayout.NORTH);
+
+        contentPanel.setBackground(new java.awt.Color(245, 255, 243));
+        contentPanel.setMaximumSize(new java.awt.Dimension(32767, 300));
+        contentPanel.setOpaque(false);
+        contentPanel.setPreferredSize(new java.awt.Dimension(252, 200));
+        contentPanel.setLayout(new javax.swing.BoxLayout(contentPanel, javax.swing.BoxLayout.LINE_AXIS));
+
+        ScrollRequestsPane.setBorder(null);
+        ScrollRequestsPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollRequestsPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        PanelRequestsItem.setBackground(new java.awt.Color(237, 239, 230));
+
+        requestArea1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(245, 255, 243), 3, true));
+        requestArea1.setPreferredSize(new java.awt.Dimension(480, 600));
+        PanelRequestsItem.add(requestArea1);
+
+        ScrollRequestsPane.setViewportView(PanelRequestsItem);
+
+        contentPanel.add(ScrollRequestsPane);
+
+        PanelRequestedAreas.add(contentPanel, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(PanelRequestedAreas);
+        PanelRequestedAreas.setBounds(0, 0, 1366, 768);
 
         PanelConsultant.setBackground(new java.awt.Color(237, 239, 230));
         PanelConsultant.setEnabled(false);
@@ -325,7 +391,7 @@ public class MEWA extends javax.swing.JFrame {
         );
         PanelChatBodyLayout.setVerticalGroup(
             PanelChatBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
+            .addGap(0, 578, Short.MAX_VALUE)
         );
 
         PanelConsultantionContainer.add(PanelChatBody, java.awt.BorderLayout.CENTER);
@@ -369,11 +435,11 @@ public class MEWA extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nav_rateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_rateMouseClicked
+    private void nav_request_areasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_request_areasMouseClicked
         // TODO add your handling code here:
 
 
-    }//GEN-LAST:event_nav_rateMouseClicked
+    }//GEN-LAST:event_nav_request_areasMouseClicked
 
     private void nav_locationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_locationMouseClicked
         // TODO add your handling code here:
@@ -429,6 +495,13 @@ public class MEWA extends javax.swing.JFrame {
         sendMessage();
     }//GEN-LAST:event_BtnMessageSendActionPerformed
 
+    private void nav_back5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back5MouseClicked
+        // TODO add your handling code here:
+
+        MoveTo(PanelRequestedAreas, PanelHome);
+        
+    }//GEN-LAST:event_nav_back5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -479,13 +552,21 @@ public class MEWA extends javax.swing.JFrame {
     private javax.swing.JPanel PanelControllers;
     private javax.swing.JPanel PanelControllers1;
     private javax.swing.JPanel PanelHome;
+    private javax.swing.JPanel PanelRequestedAreas;
+    private green.ams.components.PanelItem PanelRequestsItem;
     private javax.swing.JLabel PanelTitle3;
+    private javax.swing.JLabel PanelTitle4;
+    private javax.swing.JPanel RequestedPanelHeader;
+    private javax.swing.JScrollPane ScrollRequestsPane;
     private javax.swing.JTextField TFConsultationTopic;
     private javax.swing.JTextField TFMessage;
     private javax.swing.JPanel UserNavigation;
+    private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel nav_back3;
+    private javax.swing.JLabel nav_back5;
     private javax.swing.JLabel nav_location;
-    private javax.swing.JLabel nav_rate;
+    private javax.swing.JLabel nav_request_areas;
+    private green.ams.components.RequestArea requestArea1;
     // End of variables declaration//GEN-END:variables
 
     private void Start() {

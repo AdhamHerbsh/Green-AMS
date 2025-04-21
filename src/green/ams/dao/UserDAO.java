@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Adham
  */
-public class UserDAO {
+public class UserDAO extends DAO {
 
     private dbhelper db;
     private Connection conn;
@@ -40,6 +40,46 @@ public class UserDAO {
         }
     }
 
+        public boolean addUser(User user) {
+        if (user == null) {
+            System.out.println("Error: User object is null.");
+            return false;
+        }
+
+        boolean success = false;
+        String sql = "INSERT INTO users (FullName, Email, Address, PhoneNumber, Role, Password, CreatedDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            pst = conn.prepareStatement(sql);
+
+            pst.setString(1, user.getFull_name());
+            pst.setString(2, user.getEmail());
+            pst.setString(3, user.getAddress());
+            pst.setString(4, user.getPhone_number());
+            pst.setString(5, "User Public");
+            pst.setString(6, user.getPassword());
+            pst.setDate(7, new java.sql.Date(new java.util.Date().getTime()));
+
+            int rowsInserted = pst.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("User inserted successfully!");
+                rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    GLOBAL.user_id = rs.getInt(1);
+                    success = true;
+                } else {
+                    throw new SQLException("Creating area failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error inserting user: " + e.getMessage());
+        } finally {
+            closeResources(pst, null, null);
+        }
+
+        return success;
+    }
+    
     public int getUserId() {
         int id = 0;
         try {
@@ -102,7 +142,7 @@ public class UserDAO {
         boolean found = false;
 
         try {
-            String sql = "SELECT ID, Email, Password FROM users WHERE Email = ? AND Password = ?";
+            String sql = "SELECT ID, Email, Password, Role FROM users WHERE Email = ? AND Password = ?";
             pst = conn.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, password);
@@ -180,46 +220,6 @@ public class UserDAO {
         return users_list;
     }
 
-    public boolean addUser(User user) {
-        if (user == null) {
-            System.out.println("Error: User object is null.");
-            return false;
-        }
-
-        boolean success = false;
-        String sql = "INSERT INTO users (FullName, Email, Address, PhoneNumber, Role, Password, CreatedDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            pst = conn.prepareStatement(sql);
-
-            pst.setString(1, user.getFull_name());
-            pst.setString(2, user.getEmail());
-            pst.setString(3, user.getAddress());
-            pst.setString(4, user.getPhone_number());
-            pst.setString(5, "User Public");
-            pst.setString(6, user.getPassword());
-            pst.setDate(7, new java.sql.Date(new java.util.Date().getTime()));
-
-            int rowsInserted = pst.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("User inserted successfully!");
-                rs = pst.getGeneratedKeys();
-                if (rs.next()) {
-                    GLOBAL.user_id = rs.getInt(1);
-                    success = true;
-                } else {
-                    throw new SQLException("Creating area failed, no ID obtained.");
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error inserting user: " + e.getMessage());
-        } finally {
-            closeResources(pst, null, null);
-        }
-
-        return success;
-    }
-
     public boolean updateUser(User user) {
 
         String sql = "UPDATE users SET FullName = ?, Address = ?, PhoneNumber = ?, Password = ? WHERE ID = ?";
@@ -266,21 +266,4 @@ public class UserDAO {
         System.out.println(user.getRole());
         System.out.println(user.getCreated_date());
     }
-
-    private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (prepStmt != null) {
-                prepStmt.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Error closing resources: " + e.getMessage());
-        }
-    }
-
 }

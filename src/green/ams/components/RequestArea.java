@@ -130,7 +130,6 @@ public class RequestArea extends JPanel {
 
         // Description Area
         lbDescription = new JTextArea(4, 20);
-        lbDescription.setEditable(false);
         lbDescription.setLineWrap(true);
         lbDescription.setWrapStyleWord(true);
         lbDescription.setOpaque(false);
@@ -141,12 +140,12 @@ public class RequestArea extends JPanel {
         ScrollTextAreaPane.setPreferredSize(new Dimension(460, 120));
 
         // Buttons
-        Agree = new JButton("Agree");
+        Agree = new JButton("Send");
         Agree.setBackground(new Color(102, 153, 0));
         Agree.setFont(new Font("Traditional Arabic", Font.BOLD, 14));
         Agree.setBorder(new EmptyBorder(5, 30, 5, 30));
 
-        Cancel = new JButton("Cancel");
+        Cancel = new JButton("Hold");
         Cancel.setFont(new Font("Traditional Arabic", Font.BOLD, 14));
         Cancel.setBorder(new EmptyBorder(5, 30, 5, 30));
 

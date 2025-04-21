@@ -80,6 +80,12 @@ public class UserController {
         return order_dao.addOrderItem(order_item);
     }
 
-    
+    public void getConsultation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void getConsultationMessages() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

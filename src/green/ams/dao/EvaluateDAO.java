@@ -18,7 +18,7 @@ import java.sql.Statement;
  *
  * @author Adham
  */
-public class EvaluateDAO {
+public class EvaluateDAO extends DAO {
 
     private dbhelper db;
     private Connection conn;
@@ -102,23 +102,6 @@ public class EvaluateDAO {
         }
         
         return success;
-    }
-    
-
-    private void closeResources(PreparedStatement prepStmt, Statement statement, ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (prepStmt != null) {
-                prepStmt.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Error closing resources: " + e.getMessage());
-        }
     }
 
     public boolean addEvaluate(Feedback feedback) {

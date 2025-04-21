@@ -6,12 +6,10 @@
 package green.ams;
 
 import green.ams.components.StarRating;
-import green.ams.components.Item;
-import green.ams.components.RequestArea;
 import green.ams.components.RoundedBorder;
-import green.ams.components.WrapLayout;
 import green.ams.controllers.AreaController;
 import green.ams.controllers.AttachementsController;
+import javax.swing.table.DefaultTableModel;
 import green.ams.controllers.SampleController;
 import green.ams.controllers.UserController;
 import green.ams.models.Area;
@@ -24,46 +22,29 @@ import green.ams.models.Sample;
 import green.ams.models.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Array;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.border.AbstractBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 /**
  *
@@ -80,7 +61,6 @@ public class ADMIN extends javax.swing.JFrame {
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[+]?[0-9]{10,13}$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
 
-      
     // APP Frame Intialization
     APP app;
 
@@ -166,11 +146,10 @@ public class ADMIN extends javax.swing.JFrame {
         BtnSignOut = new javax.swing.JButton();
         UserNavigation = new javax.swing.JPanel();
         nav_samples = new javax.swing.JLabel();
-        nav_samples1 = new javax.swing.JLabel();
-        nav_samples2 = new javax.swing.JLabel();
-        nav_samples3 = new javax.swing.JLabel();
-        nav_samples5 = new javax.swing.JLabel();
-        nav_samples4 = new javax.swing.JLabel();
+        nav_consultation = new javax.swing.JLabel();
+        nav_evaltions = new javax.swing.JLabel();
+        nav_finiancial = new javax.swing.JLabel();
+        nav_users = new javax.swing.JLabel();
         PanelSamplesControl = new javax.swing.JPanel();
         PanelSampelsControlHeader = new javax.swing.JPanel();
         PanelTitle = new javax.swing.JLabel();
@@ -275,7 +254,7 @@ public class ADMIN extends javax.swing.JFrame {
         UserNavigation.setBackground(new java.awt.Color(245, 255, 243));
         UserNavigation.setMinimumSize(new java.awt.Dimension(500, 500));
         UserNavigation.setPreferredSize(new java.awt.Dimension(1350, 330));
-        UserNavigation.setLayout(new java.awt.GridLayout(2, 0, 10, 10));
+        UserNavigation.setLayout(new java.awt.GridLayout(2, 0));
 
         nav_samples.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
         nav_samples.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -291,75 +270,61 @@ public class ADMIN extends javax.swing.JFrame {
         });
         UserNavigation.add(nav_samples);
 
-        nav_samples1.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_samples1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_samples1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-consultation-removebg-preview.png"))); // NOI18N
-        nav_samples1.setText(bundle.getString("ADMIN.nav_samples1.text")); // NOI18N
-        nav_samples1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_samples1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_samples1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_samples1.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_consultation.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_consultation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nav_consultation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-consultation-removebg-preview.png"))); // NOI18N
+        nav_consultation.setText(bundle.getString("ADMIN.nav_consultation.text")); // NOI18N
+        nav_consultation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_consultation.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_consultation.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_consultation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_samples1MouseClicked(evt);
+                nav_consultationMouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_samples1);
+        UserNavigation.add(nav_consultation);
 
-        nav_samples2.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_samples2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_samples2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-evaulation-removebg-preview.png"))); // NOI18N
-        nav_samples2.setText(bundle.getString("ADMIN.nav_samples2.text")); // NOI18N
-        nav_samples2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_samples2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_samples2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_samples2.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_evaltions.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_evaltions.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nav_evaltions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-evaulation-removebg-preview.png"))); // NOI18N
+        nav_evaltions.setText(bundle.getString("ADMIN.nav_evaltions.text")); // NOI18N
+        nav_evaltions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_evaltions.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_evaltions.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_evaltions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_samples2MouseClicked(evt);
+                nav_evaltionsMouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_samples2);
+        UserNavigation.add(nav_evaltions);
 
-        nav_samples3.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_samples3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_samples3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-employees-removebg-preview.png"))); // NOI18N
-        nav_samples3.setText(bundle.getString("ADMIN.nav_samples3.text")); // NOI18N
-        nav_samples3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_samples3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_samples3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_samples3.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_finiancial.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_finiancial.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nav_finiancial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-finaical-removebg-preview.png"))); // NOI18N
+        nav_finiancial.setText(bundle.getString("ADMIN.nav_finiancial.text")); // NOI18N
+        nav_finiancial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_finiancial.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_finiancial.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_finiancial.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_samples3MouseClicked(evt);
+                nav_finiancialMouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_samples3);
+        UserNavigation.add(nav_finiancial);
 
-        nav_samples5.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_samples5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_samples5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-finaical-removebg-preview.png"))); // NOI18N
-        nav_samples5.setText(bundle.getString("ADMIN.nav_samples5.text")); // NOI18N
-        nav_samples5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_samples5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_samples5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_samples5.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_users.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_users.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nav_users.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-users-removebg-preview.png"))); // NOI18N
+        nav_users.setText(bundle.getString("ADMIN.nav_users.text")); // NOI18N
+        nav_users.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_users.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_users.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_users.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_samples5MouseClicked(evt);
+                nav_usersMouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_samples5);
-
-        nav_samples4.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_samples4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_samples4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/nav-users-removebg-preview.png"))); // NOI18N
-        nav_samples4.setText(bundle.getString("ADMIN.nav_samples4.text")); // NOI18N
-        nav_samples4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_samples4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_samples4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_samples4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_samples4MouseClicked(evt);
-            }
-        });
-        UserNavigation.add(nav_samples4);
+        UserNavigation.add(nav_users);
 
         PanelHome.add(UserNavigation, java.awt.BorderLayout.CENTER);
 
@@ -824,7 +789,7 @@ public class ADMIN extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         sendMessage();
-        
+
     }//GEN-LAST:event_BtnMessageSendActionPerformed
 
     private void nav_samplesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samplesMouseClicked
@@ -887,37 +852,35 @@ public class ADMIN extends javax.swing.JFrame {
 // Set row height to fit images
         TableSamples.setRowHeight(70);
 
-
         MoveTo(PanelHome, PanelSamplesControl);
 
     }//GEN-LAST:event_nav_samplesMouseClicked
 
-    private void nav_samples1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samples1MouseClicked
+    private void nav_consultationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_consultationMouseClicked
         // TODO add your handling code here:
+
+        user = new User();
         
-        
+        user_controller.getConsultationMessages();
+                
+                
         MoveTo(PanelHome, PanelConsultant);
-        
-    }//GEN-LAST:event_nav_samples1MouseClicked
+    }//GEN-LAST:event_nav_consultationMouseClicked
 
-    private void nav_samples2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samples2MouseClicked
+    private void nav_evaltionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_evaltionsMouseClicked
         // TODO add your handling code here:
-        
+
         MoveTo(PanelHome, PanelEvaluationsControl);
-        
-    }//GEN-LAST:event_nav_samples2MouseClicked
 
-    private void nav_samples3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samples3MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nav_samples3MouseClicked
+    }//GEN-LAST:event_nav_evaltionsMouseClicked
 
-    private void nav_samples4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samples4MouseClicked
+    private void nav_usersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_usersMouseClicked
         // TODO add your handling code here:
-        
+
         users_list = new ArrayList<>();
-        
+
         users_list = user_controller.UsersTable();
-        
+
         for (User user1 : users_list) {
             System.out.println(user1.getId());
             System.out.println(user1.getFull_name());
@@ -927,7 +890,7 @@ public class ADMIN extends javax.swing.JFrame {
             System.out.println(user1.getPhone_number());
             System.out.println(user1.getCreated_date());
         }
-        
+
         // Define table model with column names
         DefaultTableModel model = new DefaultTableModel();
 
@@ -937,10 +900,9 @@ public class ADMIN extends javax.swing.JFrame {
         model.addColumn("Phone Number");
         model.addColumn("Role");
         model.addColumn("Created Date");
-        
-        
+
         // Load rows into model
-        for (User user: users_list) {
+        for (User user : users_list) {
             model.addRow(new Object[]{
                 user.getFull_name(),
                 user.getEmail(),
@@ -952,14 +914,13 @@ public class ADMIN extends javax.swing.JFrame {
         }
         TableUsers.setModel(model);
 
-        
         MoveTo(PanelHome, PanelUsersControl);
-        
-    }//GEN-LAST:event_nav_samples4MouseClicked
 
-    private void nav_samples5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_samples5MouseClicked
+    }//GEN-LAST:event_nav_usersMouseClicked
+
+    private void nav_finiancialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_finiancialMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_nav_samples5MouseClicked
+    }//GEN-LAST:event_nav_finiancialMouseClicked
 
     private void nav_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_backMouseClicked
         // TODO add your handling code here:
@@ -970,7 +931,7 @@ public class ADMIN extends javax.swing.JFrame {
     private void nav_back1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back1MouseClicked
         // TODO add your handling code here:
         MoveTo(PanelUsersControl, PanelHome);
-        
+
     }//GEN-LAST:event_nav_back1MouseClicked
 
     private void BtnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSignOutActionPerformed
@@ -1083,12 +1044,11 @@ public class ADMIN extends javax.swing.JFrame {
     private javax.swing.JLabel nav_back1;
     private javax.swing.JLabel nav_back2;
     private javax.swing.JLabel nav_back3;
+    private javax.swing.JLabel nav_consultation;
+    private javax.swing.JLabel nav_evaltions;
+    private javax.swing.JLabel nav_finiancial;
     private javax.swing.JLabel nav_samples;
-    private javax.swing.JLabel nav_samples1;
-    private javax.swing.JLabel nav_samples2;
-    private javax.swing.JLabel nav_samples3;
-    private javax.swing.JLabel nav_samples4;
-    private javax.swing.JLabel nav_samples5;
+    private javax.swing.JLabel nav_users;
     private green.ams.components.PanelItem panelItem1;
     // End of variables declaration//GEN-END:variables
 
@@ -1102,7 +1062,7 @@ public class ADMIN extends javax.swing.JFrame {
     }
 
     private void CustomeEdits() {
-        
+
         TabPane.setTitleAt(0, "All Samples Table");
         TabPane.setTitleAt(1, "All Samples Orders");
 
@@ -1173,7 +1133,6 @@ public class ADMIN extends javax.swing.JFrame {
         wrapperPanel.setOpaque(false);  // matches background
         JPanel bubble = createResponsiveBubble(text);
 
-    
         wrapperPanel.add(bubble, BorderLayout.WEST);
 
         wrapperPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
