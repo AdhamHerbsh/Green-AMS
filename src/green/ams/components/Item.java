@@ -92,7 +92,7 @@ public class Item extends javax.swing.JPanel {
         PanelItemCard.add(jScrollPane1);
 
         SubContainer.setOpaque(false);
-        SubContainer.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 5));
+        SubContainer.setLayout(new java.awt.GridLayout(1, 0, 10, 10));
 
         lbCategory.setFont(new java.awt.Font("Traditional Arabic", 1, 12)); // NOI18N
         lbCategory.setForeground(new java.awt.Color(76, 76, 76));
