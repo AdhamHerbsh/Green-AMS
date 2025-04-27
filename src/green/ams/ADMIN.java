@@ -167,7 +167,7 @@ public class ADMIN extends javax.swing.JFrame {
         nav_evaltions = new javax.swing.JLabel();
         nav_finiancial = new javax.swing.JLabel();
         nav_users = new javax.swing.JLabel();
-        nav_areas = new javax.swing.JLabel();
+        nav_areas1 = new javax.swing.JLabel();
         PanelSamplesControl = new javax.swing.JPanel();
         PanelSampelsControlHeader = new javax.swing.JPanel();
         PanelTitle = new javax.swing.JLabel();
@@ -374,19 +374,19 @@ public class ADMIN extends javax.swing.JFrame {
         });
         UserNavigation.add(nav_users);
 
-        nav_areas.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
-        nav_areas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nav_areas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/areas-removebg-preview.png"))); // NOI18N
-        nav_areas.setText(bundle.getString("ADMIN.nav_areas.text")); // NOI18N
-        nav_areas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        nav_areas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nav_areas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nav_areas.addMouseListener(new java.awt.event.MouseAdapter() {
+        nav_areas1.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
+        nav_areas1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nav_areas1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/green/ams/assets/icons/areas-removebg-preview.png"))); // NOI18N
+        nav_areas1.setText(bundle.getString("ADMIN.nav_areas1.text")); // NOI18N
+        nav_areas1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        nav_areas1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nav_areas1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nav_areas1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                nav_areasMouseClicked(evt);
+                nav_areas1MouseClicked(evt);
             }
         });
-        UserNavigation.add(nav_areas);
+        UserNavigation.add(nav_areas1);
 
         PanelHome.add(UserNavigation, java.awt.BorderLayout.CENTER);
 
@@ -696,11 +696,11 @@ public class ADMIN extends javax.swing.JFrame {
         PanelContainer3Layout.setHorizontalGroup(
             PanelContainer3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelContainer3Layout.createSequentialGroup()
-                .addGap(158, 158, 158)
+                .addGap(109, 109, 109)
                 .addComponent(PanelLeft3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(PanelRight3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(PanelRight3, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
         PanelContainer3Layout.setVerticalGroup(
             PanelContainer3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1565,46 +1565,21 @@ public class ADMIN extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_RBtnTreesActionPerformed
 
-    private void nav_areasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_areasMouseClicked
-        // TODO add your handling code here:
 
-        // Fetch areas and their most recent pending requests
-        List<AreaWithRequest> areasWithRequests = admin_controller.fetchAreasWithRequests();
-
-        // Setup layout and background
-        PanelCostSetting.removeAll();
-        PanelCostSetting.setLayout(new WrapLayout(FlowLayout.LEFT, 15, 15));
-
-        // Create and add AreaCostCard components
-        for (AreaWithRequest area : areasWithRequests) {
-            AreaCostCard card = new AreaCostCard(
-                    area.getAreaId(),
-                    area.getRegionName(),
-                    area.getDescription(),
-                    area.getCurrentCost()
-            );
-            PanelCostSetting.add(card);
-        }
-
-        PanelCostSetting.revalidate();
-        PanelCostSetting.repaint();
-
-        MoveTo(PanelHome, PanelAreasControl);
-
-    }//GEN-LAST:event_nav_areasMouseClicked
-
-    
-    
-    
-    
-    
     private void nav_back5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back5MouseClicked
         // TODO add your handling code here:
 
         MoveTo(PanelAreasControl, PanelHome);
 
-
     }//GEN-LAST:event_nav_back5MouseClicked
+
+    private void nav_areas1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_areas1MouseClicked
+        // TODO add your handling code here:
+        
+        MoveTo(PanelHome, PanelAreasControl);
+        
+        
+    }//GEN-LAST:event_nav_areas1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1737,7 +1712,7 @@ public class ADMIN extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JLabel nav_areas;
+    private javax.swing.JLabel nav_areas1;
     private javax.swing.JLabel nav_back;
     private javax.swing.JLabel nav_back1;
     private javax.swing.JLabel nav_back2;

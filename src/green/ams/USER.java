@@ -169,10 +169,6 @@ public class USER extends javax.swing.JFrame {
     private Timer refreshTimer; // Now javax.swing.Timer
     private static final int MESSAGE_LIMIT = 50; // Load 50 messages initially
     private int oldestMessageId = -1; // Track oldest message for "Load More"
-    private boolean isLoadingMessages = false;
-// Add this near other component declarations in initComponents()
-    private javax.swing.JButton BtnLoadMore;
-    private javax.swing.JLabel LblLoading;
 
     public USER() {
         initComponents();
@@ -377,24 +373,7 @@ public class USER extends javax.swing.JFrame {
         TFMessage = new javax.swing.JTextField();
         BtnMessageSend = new green.ams.components.GButton();
 
-	BtnLoadMore = new javax.swing.JButton();
-	LblLoading = new javax.swing.JLabel();
-
-	java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("green/ams/Bundle"); // NOI18N
-	
-	BtnLoadMore.setFont(new java.awt.Font("Traditional Arabic", 1, 14));
-	BtnLoadMore.setText(bundle.getString("USER.BtnLoadMore.text")); // Ensure this key exists in Bundle.properties
-	BtnLoadMore.setBackground(new java.awt.Color(33, 104, 73));
-	BtnLoadMore.setForeground(new java.awt.Color(255, 255, 255));
-	BtnLoadMore.setBorder(null);
-	BtnLoadMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-	BtnLoadMore.setPreferredSize(new java.awt.Dimension(120, 30));
-
-	LblLoading.setFont(new java.awt.Font("Traditional Arabic", 1, 12));
-	LblLoading.setText(bundle.getString("USER.LblLoading.text")); // Ensure this key exists in Bundle.properties
-	LblLoading.setForeground(new java.awt.Color(33, 104, 73));
-
- 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("green/ams/Bundle"); // NOI18N
         DialogStarRating.setTitle(bundle.getString("USER.DialogStarRating.title")); // NOI18N
         DialogStarRating.setBackground(new java.awt.Color(245, 255, 243));
         DialogStarRating.setLocation(new java.awt.Point(733, 334));
@@ -502,7 +481,7 @@ public class USER extends javax.swing.JFrame {
         PanelSupportForm4.add(jPanel5);
 
         TASupportMessage.setColumns(20);
-        TASupportMessage.setFont(new java.awt.Font("Traditional Arabic", 1, 12)); // NOI18N
+        TASupportMessage.setFont(new java.awt.Font("Traditional Arabic", 1, 14)); // NOI18N
         TASupportMessage.setLineWrap(true);
         TASupportMessage.setRows(5);
         TASupportMessage.setText(bundle.getString("USER.TASupportMessage.text")); // NOI18N
@@ -533,6 +512,7 @@ public class USER extends javax.swing.JFrame {
 
         BtnSupportSubmit.setBackground(new java.awt.Color(102, 153, 0));
         BtnSupportSubmit.setFont(new java.awt.Font("Traditional Arabic", 1, 18)); // NOI18N
+        BtnSupportSubmit.setForeground(new java.awt.Color(255, 255, 255));
         BtnSupportSubmit.setText(bundle.getString("USER.BtnSupportSubmit.text")); // NOI18N
         BtnSupportSubmit.setActionCommand(bundle.getString("USER.BtnSupportSubmit.actionCommand")); // NOI18N
         BtnSupportSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -1480,10 +1460,10 @@ public class USER extends javax.swing.JFrame {
         );
         PanelSamplesTitleLayout.setVerticalGroup(
             PanelSamplesTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(LblSamplesTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+            .addComponent(LblSamplesTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 48, Short.MAX_VALUE)
         );
 
-        PanelNavHeader.add(PanelSamplesTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 270, 70));
+        PanelNavHeader.add(PanelSamplesTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, 270, 50));
 
         nav_back2.setFont(new java.awt.Font("Traditional Arabic", 1, 24)); // NOI18N
         nav_back2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -2276,7 +2256,7 @@ public class USER extends javax.swing.JFrame {
     private void nav_fruits_vegetablesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_fruits_vegetablesMouseClicked
         // TODO add your handling code here:
 
-        sample_category = "Fruits";
+        sample_category = "Fruits & Vegetables";
 
         samplesShow(sample_category);
 
@@ -2325,7 +2305,7 @@ public class USER extends javax.swing.JFrame {
     private void nav_back1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nav_back1MouseClicked
         // TODO add your handling code here:
 
-        MoveTo(PanelSamplesShop, PanelSamples);
+        MoveTo(PanelSamplesShop, PanelSample);
 
 
     }//GEN-LAST:event_nav_back1MouseClicked
@@ -3111,16 +3091,8 @@ public class USER extends javax.swing.JFrame {
         chatScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         chatScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        // Add Load More button at the top
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        topPanel.setOpaque(false);
-        BtnLoadMore.setVisible(false); // Hidden until messages are loaded
-        topPanel.add(BtnLoadMore);
-        topPanel.add(LblLoading);
-        LblLoading.setVisible(false);
 
         PanelChatBody.setLayout(new BorderLayout());
-        PanelChatBody.add(topPanel, BorderLayout.NORTH);
         PanelChatBody.add(chatScrollPane, BorderLayout.CENTER);
         PanelChatBody.revalidate();
         PanelChatBody.repaint();
@@ -3130,7 +3102,6 @@ public class USER extends javax.swing.JFrame {
 
         // Add action listeners
         BtnMessageSend.addActionListener(e -> sendMessage());
-        BtnLoadMore.addActionListener(e -> loadMoreMessages());
         BtnTopic.addActionListener(e -> {
             String topic = TFConsultationTopic.getText().trim();
             if (!topic.isEmpty() && !topic.equals("Write your topic here")) {
@@ -3158,13 +3129,6 @@ public class USER extends javax.swing.JFrame {
 
     // Updated loadChatHistory method with message limit
     private void loadChatHistory() {
-        if (isLoadingMessages) {
-            return;
-        }
-        isLoadingMessages = true;
-        LblLoading.setVisible(true);
-        BtnLoadMore.setEnabled(false);
-
         SwingUtilities.invokeLater(() -> {
             try {
                 List<Consultation> history = user_controller.getChatHistory(GLOBAL.user_id);
@@ -3188,27 +3152,15 @@ public class USER extends javax.swing.JFrame {
                 scrollToBottom();
 
                 // Show "Load More" button if there are more messages to load
-                BtnLoadMore.setVisible(startIndex > 0);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error loading chat history: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                isLoadingMessages = false;
-                LblLoading.setVisible(false);
-                BtnLoadMore.setEnabled(true);
             }
         });
     }
 
     // New method to load more messages
     private void loadMoreMessages() {
-        if (isLoadingMessages) {
-            return;
-        }
-        isLoadingMessages = true;
-        LblLoading.setVisible(true);
-        BtnLoadMore.setEnabled(false);
-
-        SwingUtilities.invokeLater(() -> {
+       SwingUtilities.invokeLater(() -> {
             try {
                 List<Consultation> history = user_controller.getChatHistory(GLOBAL.user_id);
                 List<Consultation> olderMessages = new ArrayList<>();
@@ -3230,13 +3182,9 @@ public class USER extends javax.swing.JFrame {
                 }
 
                 // Update "Load More" button visibility
-                BtnLoadMore.setVisible(history.stream().anyMatch(msg -> msg.getId() < oldestMessageId));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error loading more messages: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } finally {
-                isLoadingMessages = false;
-                LblLoading.setVisible(false);
-                BtnLoadMore.setEnabled(true);
             }
         });
     }
@@ -3265,10 +3213,24 @@ public class USER extends javax.swing.JFrame {
 
     // Add this method to handle message sending
     private void sendSupportMessage() {
-        String text = TFSupportTopic.getText().trim();
-        if (!text.isEmpty()) {
-//            addMessage(text); // User message
-            TASupportMessage.setText("");
+        if (TFSupportTopic.getText().trim().equals("") || TASupportMessage.getText().trim().equals("") || TFSupportTopic.getText().trim().equals("Enter Topic") || TASupportMessage.getText().trim().equals("Write your message here")) {            
+
+            JOptionPane.showMessageDialog(this, "Write Messag Don't Leave It!");
+            
+        }else {
+            consultation = new Consultation();
+            
+            consultation.setUser_id(GLOBAL.user_id);
+            consultation.setReceived_id(0);
+            consultation.setTopic(TFSupportTopic.getText().trim());
+            consultation.setMessage(TAMessage.getText().trim());
+            
+            user_controller.Consultation(consultation);
+           
+            TFSupportTopic.setText("Enter Topic");
+            TASupportMessage.setText("Write your message here");
+            
+            DialogSupport.dispose();
         }
     }
 

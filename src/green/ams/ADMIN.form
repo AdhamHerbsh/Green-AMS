@@ -251,7 +251,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="nav_usersMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="nav_areas">
+            <Component class="javax.swing.JLabel" name="nav_areas1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Traditional Arabic" size="24" style="1"/>
@@ -261,7 +261,7 @@
                   <Image iconType="3" name="/green/ams/assets/icons/areas-removebg-preview.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="green/ams/Bundle.properties" key="ADMIN.nav_areas.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="green/ams/Bundle.properties" key="ADMIN.nav_areas1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -270,7 +270,7 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="nav_areasMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="nav_areas1MouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -677,11 +677,11 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="158" pref="158" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
                           <Component id="PanelLeft3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="50" pref="50" max="-2" attributes="0"/>
-                          <Component id="PanelRight3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="158" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="PanelRight3" min="-2" pref="580" max="-2" attributes="0"/>
+                          <EmptySpace pref="142" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
