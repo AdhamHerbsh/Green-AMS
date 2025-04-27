@@ -19,13 +19,15 @@ public class User {
     private String phone_number;
     private String role;
     private String password;
+    private int score;
+
     private Date created_date;
 
     public User() {
         
     }
 
-    public User(int id, String full_name, String email, String address, String phone_number, String role, String password, Date created_date) {
+    public User(int id, String full_name, String email, String address, String phone_number, String role, String password, int score, Date created_date) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -33,6 +35,7 @@ public class User {
         this.phone_number = phone_number;
         this.role = role;
         this.password = password;
+        this.score = score;
         this.created_date = created_date;
     }
     
@@ -93,6 +96,14 @@ public class User {
         this.password = password;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
     public Date getCreated_date() {
         return created_date;
     }

@@ -15,11 +15,15 @@ public class Consultation {
 
     private int id;
     private int user_id;
+    private int received_id;
+
     private String topic;
     private String message;
     private String reply;
     private String status;
     private Date sended_date;
+    private String sender_role;
+
 
     public Consultation() {
     }
@@ -48,6 +52,14 @@ public class Consultation {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public int getReceived_id() {
+        return received_id;
+    }
+
+    public void setReceived_id(int received_id) {
+        this.received_id = received_id;
     }
 
     public String getTopic() {
@@ -90,6 +102,12 @@ public class Consultation {
         this.sended_date = sended_date;
     }
 
-    
-    
+    public String getSender_role() {
+        return sender_role;
+    }
+
+    public void setSender_role(String sender_role) {
+        this.sender_role = sender_role;
+    }
+
 }

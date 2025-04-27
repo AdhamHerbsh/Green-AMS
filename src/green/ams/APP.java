@@ -9,8 +9,11 @@ import green.ams.controllers.AuthController;
 import green.ams.services.InputValidator;
 import green.ams.models.User;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
@@ -512,15 +515,29 @@ public class APP extends javax.swing.JFrame {
 
                     user_frame = new USER();
                     user_frame.setVisible(true);
-
+                    this.dispose();
                     break;
-                case "MEWA":
+                case "Mewa":
 
                     mewa_frame = new MEWA();
 
+                    mewa_frame.setVisible(true);
+
+                    this.dispose();
                     break;
-                case "Admin":
-                    break;
+                case "Admin": {
+                    try {
+                        admin_frame = new ADMIN();
+
+                        admin_frame.setVisible(true);
+
+                        this.dispose();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(APP.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                break;
                 default:
 
                     this.dispose();
@@ -537,6 +554,8 @@ public class APP extends javax.swing.JFrame {
                     System.exit(0);
                 case 0:
                     MoveTo(PanelSignIn, PanelGate);
+                    LTFUsername.setText("");
+                    LTFPassword.setText("");
                     break;
                 default:
                     System.out.println("999");
@@ -612,10 +631,13 @@ public class APP extends javax.swing.JFrame {
 
             // Proceed with the next steps
             if (auth.Register(user)) {
+
                 user_frame = new USER();
                 user_frame.setVisible(true);
                 this.dispose();
+
             } else {
+
                 JOptionPane.showMessageDialog(rootPane, "خطاء في انشاء الحساب", "تحذير", 2);
 
                 int fb = JOptionPane.showConfirmDialog(rootPane, " اعادة المحاولة");
@@ -667,7 +689,6 @@ public class APP extends javax.swing.JFrame {
             PasswordVisibility.setText((GLOBAL.currentLocale.getLanguage().equals("en")) ? "Show" : "اظهار");
             LTFPassword.setEchoChar('•'); // Hide password
         }
-        System.out.println(LTFPassword.getLocale());
 
     }//GEN-LAST:event_PasswordVisibilityActionPerformed
 

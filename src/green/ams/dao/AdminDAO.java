@@ -1,13 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * AdminDAO.java
  */
 package green.ams.dao;
 
-import green.ams.components.ChatCard;
-import green.ams.models.Attachements;
-import green.ams.models.Request;
+import green.ams.models.AreaWithRequest;
+import green.ams.models.Consultation;
+import green.ams.models.FeedbackEvaluationDTO;
+import green.ams.models.Order;
+import green.ams.models.User;
 import green.ams.services.dbhelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,22 +20,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Adham
+ * Data Access Object for Admin-specific operations.
  */
 public class AdminDAO extends DAO {
 
-    private List<ChatCard> chat_card_list;
-    
+    private dbhelper db;
+    private Connection conn;
+
     public AdminDAO() {
-        this.setDb(new dbhelper());
+        this.db = new dbhelper();
         try {
-            this.setConn(this.getDb().getConnection());
-            if (this.getConn() == null) {
-                System.out.println("Error: Database connection is null.");
+            this.conn = db.getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null.");
             }
-        } catch (Exception e) {
-            System.out.println("Error initializing database connection: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error initializing database connection: " + e.getMessage());
+            throw new RuntimeException("Failed to initialize AdminDAO", e);
         }
     }
 
@@ -43,46 +44,139 @@ public class AdminDAO extends DAO {
         String sql = "SELECT UserID, COUNT(*) as WaitCount FROM consultations WHERE Status = 'wait' GROUP BY UserID";
         Map<Integer, Integer> userWaitCounts = new HashMap<>();
 
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-
-        try {
-            pst = getConn().prepareStatement(sql);
-            rs = pst.executeQuery();
-
+        try (PreparedStatement pst = conn.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
-                int userId = rs.getInt("UserID");
-                int count = rs.getInt("WaitCount");
-                
-                
-                userWaitCounts.put(userId, count);
+                userWaitCounts.put(rs.getInt("UserID"), rs.getInt("WaitCount"));
             }
         } catch (SQLException e) {
-            System.out.println("Error fetching wait counts: " + e.getMessage());
-        } finally {
-            closeResources(pst, null, rs);
+            System.err.println("Error fetching wait counts: " + e.getMessage());
         }
-
         return userWaitCounts;
     }
-    
-    
-    public List<ChatCard> getConsultationMessage(){
-        
-        chat_card_list = new ArrayList<>();
-        
-        String sql = "SELECT UserID, Topic, Message, Reply, Status, SendedDate FROM consultations";
-        
-        try (PreparedStatement pst = getConn().prepareStatement(sql)) {
-            
-            setRs(pst.executeQuery());
-            
-        } catch (Exception e) {
+
+    public List<User> getUsersWithConsultations() {
+        List<User> users = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT u.ID, u.FullName, u.Email "
+                + "FROM users u "
+                + "INNER JOIN consultations c ON (u.ID = c.UserID OR u.ID = c.ReceivedID) "
+                + "WHERE u.Role = 'User Public' ";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("ID"));
+                user.setFull_name(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving users with consultations: " + e.getMessage());
         }
-        
-        
-        return chat_card_list;
-        
+        return users;
     }
+
+    public List<Order> getOrdersWithUserDetails() {
+        List<Order> orders = new ArrayList<>();
+
+        String sql = "SELECT o.ID, o.UserID, o.OrderNumber, o.TotalAmount, o.PaymentMethod, o.OrderDate, u.FullName "
+                + "FROM orders o "
+                + "INNER JOIN users u ON o.UserID = u.ID;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("ID"),
+                        rs.getInt("UserID"),
+                        rs.getInt("OrderNumber"),
+                        rs.getDouble("TotalAmount"),
+                        rs.getString("PaymentMethod"),
+                        rs.getDate("OrderDate"),
+                        rs.getString("FullName")
+                );
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
+
+    public List<FeedbackEvaluationDTO> getFeedbackWithEvaluations() {
+        List<FeedbackEvaluationDTO> feedbackList = new ArrayList<>();
+        String sql = "SELECT f.FullName, f.Message, e.Rate, f.CreatedDate "
+                + "FROM evaluations e "
+                + "LEFT JOIN feedback f ON e.FeedbackID = f.ID";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                FeedbackEvaluationDTO dto = new FeedbackEvaluationDTO(
+                        rs.getString("FullName"),
+                        rs.getString("Message"),
+                        rs.getInt("Rate"),
+                        rs.getDate("CreatedDate")
+                );
+                feedbackList.add(dto);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return feedbackList;
+    }
+
+    // Example method to fetch areas with their most recent pending requests
+    public List<AreaWithRequest> fetchAreasWithRequests() {
+        List<AreaWithRequest> areasWithRequests = new ArrayList<>();
+        String sql = "SELECT a.ID, a.RegionName, a.Description, r.Cost "
+                + "FROM requests r, areas a "
+                + "WHERE r.AreaID = a.ID and r.Status = 'Replied'";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                AreaWithRequest area = new AreaWithRequest(
+                        rs.getInt("ID"),
+                        rs.getString("RegionName"),
+                        rs.getString("Description"),
+                        rs.getDouble("Cost")
+                );
+                areasWithRequests.add(area);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return areasWithRequests;
+    }
+
+    
+    public boolean increaseUserScoreByAreaId(int areaId) {
+        String sql = "UPDATE users u " +
+                     "SET u.Score = u.Score + 50 " +
+                     "WHERE u.ID = (SELECT UserID FROM areas WHERE ID = ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, areaId);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0; // Return true if a user was updated, false otherwise
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     
 }

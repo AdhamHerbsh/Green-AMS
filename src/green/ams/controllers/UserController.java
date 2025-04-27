@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * UserController.java
  */
 package green.ams.controllers;
 
@@ -18,74 +16,53 @@ import green.ams.models.User;
 import java.util.List;
 
 /**
- *
- * @author Adham
+ * Controller for User operations.
  */
 public class UserController {
 
-    // User Model Intialization
-    User user;
+    private UserDAO userDAO = new UserDAO();
+    private EvaluateDAO evaluateDAO = new EvaluateDAO();
+    private OrderDAO orderDAO = new OrderDAO();
+    private ConsultationDAO consultationDAO = new ConsultationDAO();
 
-    // User Data Access Object Intialization
-    UserDAO user_dao = new UserDAO();
-
-    // Evaluate Data Access Object Intialization
-    EvaluateDAO evaluate_dao = new EvaluateDAO();
-
-    // Order Data Access Object Intialization
-    OrderDAO order_dao = new OrderDAO();
-
-    // Evaluate Data Access Object Intialization
-    ConsultationDAO consultation_dao = new ConsultationDAO();
-    
-    
-    
-    public UserController() {
-    
-    }
-    
     public User UserProfile(int id) {
-        return user_dao.getUser(id);
+        return userDAO.getUser(id);
     }
-    
+
     public boolean Evaluate(Evaluate evaluate) {
-        return evaluate_dao.addEvaluate(evaluate);
+        return evaluateDAO.addEvaluate(evaluate);
     }
-    
+
     public boolean Feedback(Feedback feedback) {
-        return evaluate_dao.addFeedback(feedback);
+        return evaluateDAO.addFeedback(feedback);
     }
 
     public boolean Consultation(Consultation consultation) {
-        return consultation_dao.addConsultation(consultation);
+        return consultationDAO.addConsultation(consultation);
+    }
+
+    public List<Consultation> getNewMessages(int id, int lastMessageId) {
+        return consultationDAO.getNewMessages(id, lastMessageId);
+    }
+
+    public List<Consultation> getChatHistory(int id) {
+        return consultationDAO.getChatHistory(id);
     }
 
     public int Order(Order order) {
-        return order_dao.makeOrder(order);
-    }
-    
-    public String getMessages(int user_id, String text) {
-        return consultation_dao.getReply(user_id, text);
+        return orderDAO.makeOrder(order);
     }
 
     public boolean updateUserProfile(User user) {
-        return user_dao.updateUser(user);
+        return userDAO.updateUser(user);
     }
 
-    public List<User> UsersTable() {
-        return user_dao.getUsersList();
+    public boolean OrderItem(List<OrderItem> orderItem) {
+        return orderDAO.addOrderItem(orderItem);
     }
 
-    public boolean OrderItem(List<OrderItem> order_item) {
-        return order_dao.addOrderItem(order_item);
+    public boolean addFinancialTransaction(int userId, int orderId, double amount, java.util.Date transactionDate) {
+        return orderDAO.addFinancialTransaction(userId, orderId, amount, transactionDate);
     }
 
-    public void getConsultation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void getConsultationMessages() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

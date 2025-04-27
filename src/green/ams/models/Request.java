@@ -21,7 +21,11 @@ public class Request {
     private int id;
     private int area_id;
     private int user_id;
+    private String region_name;
     private String reply;
+    private String description;
+    private String address;
+    private String land_area;
     private double cost;
     private String status;
     private Date requested_date;
@@ -65,6 +69,14 @@ public class Request {
         this.user_id = user_id;
     }
 
+    public String getRegion_name() {
+        return region_name;
+    }
+
+    public void setRegion_name(String region_name) {
+        this.region_name = region_name;
+    }
+
     public String getReply() {
         return reply;
     }
@@ -72,6 +84,31 @@ public class Request {
     public void setReply(String reply) {
         this.reply = reply;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLand_area() {
+        return land_area;
+    }
+
+    public void setLand_area(String land_area) {
+        this.land_area = land_area;
+    }
+
 
     public double getCost() {
         return cost;

@@ -18,6 +18,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 /**
  *
  * @author Adham
@@ -75,7 +76,7 @@ public class SampleController {
     }
 
     public void removeSampleItem(int item_id) {
-      sample_dao.deleteItem(item_id);
+        sample_dao.deleteItem(item_id);
     }
 
     public boolean removeAll() {

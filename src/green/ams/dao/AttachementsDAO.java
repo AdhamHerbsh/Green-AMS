@@ -54,8 +54,7 @@ public class AttachementsDAO extends JFrame {
         } catch (Exception e) {
             System.out.println("Error initializing database connection: " + e.getMessage());
         }
-        
-        
+
         setTitle("Uploaded Images");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -66,15 +65,15 @@ public class AttachementsDAO extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(imagePanel);
         add(scrollPane, BorderLayout.CENTER);
-        
+
         showAllAttachements();
-        
+
     }
 
     public boolean showAllAttachements() {
 
         try {
-            
+
             String sql = "SELECT ImageName, ImageData FROM attachements";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -109,7 +108,7 @@ public class AttachementsDAO extends JFrame {
     public boolean uploadAttachements(Attachements attachements) {
         try {
             String sql = "INSERT INTO attachements (AreaID, ImageName, ImageData, UploadedDate) VALUES (?, ?, ?, ?)";
-       
+
             pst = conn.prepareStatement(sql);
 
             for (File imageFile : attachements.getFiles()) {
@@ -123,21 +122,17 @@ public class AttachementsDAO extends JFrame {
             }
 
             JOptionPane.showMessageDialog(null, "Images uploaded successfully!");
+            return true;
         } catch (HeadlessException | IOException | SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error uploading images: " + ex.getMessage());
+            return false;
         }
-        return false;
-    
-    
     }
-    
-    
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new AttachementsDAO().setVisible(true);
         });
     }
-
 
 }

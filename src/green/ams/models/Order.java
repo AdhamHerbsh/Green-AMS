@@ -12,27 +12,35 @@ import java.util.Date;
  * @author Adham
  */
 public class Order {
-    
-    private int id;
-    private int user_id;
-    private int order_number;
 
-    private double total_amount;
-    private String payment_method;
-    private Date order_date;
+    private int id;
+    private int userId;
+    private int orderNumber;
+    private double totalAmount;
+    private String paymentMethod;
+    private Date orderDate;
+    private String fullName; // New field for user's full name
 
     public Order() {
     }
 
-    public Order(int id, int user_id, int order_number, double total_amount, String payment_method, Date order_date) {
+    // Constructor used in getOrdersList
+    public Order(int id, int userId, int orderNumber, double totalAmount, String paymentMethod, Date orderDate) {
         this.id = id;
-        this.user_id = user_id;
-        this.order_number = order_number;
-        this.total_amount = total_amount;
-        this.payment_method = payment_method;
-        this.order_date = order_date;
+        this.userId = userId;
+        this.orderNumber = orderNumber;
+        this.totalAmount = totalAmount;
+        this.paymentMethod = paymentMethod;
+        this.orderDate = orderDate;
     }
 
+    // Constructor for joined data
+    public Order(int id, int userId, int orderNumber, double totalAmount, String paymentMethod, Date orderDate, String fullName) {
+        this(id, userId, orderNumber, totalAmount, paymentMethod, orderDate);
+        this.fullName = fullName;
+    }
+
+    // Getters and setters
     public int getId() {
         return id;
     }
@@ -42,42 +50,50 @@ public class Order {
     }
 
     public int getUser_id() {
-        return user_id;
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser_id(int userId) {
+        this.userId = userId;
     }
 
     public int getOrder_number() {
-        return order_number;
+        return orderNumber;
     }
 
-    public void setOrder_number(int order_number) {
-        this.order_number = order_number;
+    public void setOrder_number(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public double getTotal_amount() {
-        return total_amount;
+        return totalAmount;
     }
 
-    public void setTotal_amount(double total_amount) {
-        this.total_amount = total_amount;
+    public void setTotal_amount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public String getPayment_method() {
-        return payment_method;
+        return paymentMethod;
     }
 
-    public void setPayment_method(String payment_method) {
-        this.payment_method = payment_method;
+    public void setPayment_method(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public Date getOrder_date() {
-        return order_date;
+        return orderDate;
     }
 
-    public void setOrder_date(Date order_date) {
-        this.order_date = order_date;
+    public void setOrder_date(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

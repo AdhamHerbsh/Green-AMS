@@ -44,7 +44,7 @@ public class OrderDAO {
     public int makeOrder(Order order) {
         String sql = "INSERT INTO orders (UserID, OrderNumber, TotalAmount, PaymentMethod, OrderDate) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             stmt.setInt(1, order.getUser_id());
             stmt.setInt(2, order.getOrder_number());
             stmt.setDouble(3, order.getTotal_amount());
@@ -71,7 +71,7 @@ public class OrderDAO {
     }
 
     // 2. Get all orders
-    public List<Order> getOrders() {
+    public List<Order> getOrdersList() {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders";
 
@@ -80,12 +80,12 @@ public class OrderDAO {
 
             while (rs.next()) {
                 Order order = new Order(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getInt("order_number"),
-                        rs.getDouble("total_amount"),
-                        rs.getString("payment_method"),
-                        rs.getDate("order_date")
+                        rs.getInt("ID"),
+                        rs.getInt("UserId"),
+                        rs.getInt("OrderNumber"),
+                        rs.getDouble("TotalAmount"),
+                        rs.getString("PaymentMethod"),
+                        rs.getDate("OrderDate")
                 );
                 orders.add(order);
             }
@@ -99,18 +99,36 @@ public class OrderDAO {
 
     public boolean addOrderItem(List<OrderItem> items) {
         String sql = "INSERT INTO order_items (OrderID, SampleItemID, OrderNumber) VALUES (?, ?, ?)";
-
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (OrderItem item : items) {
                 stmt.setInt(1, item.getOrder_id());
                 stmt.setInt(2, item.getSample_item_id());
                 stmt.setInt(3, item.getOrder_number());
-                
+                stmt.addBatch(); // Add to batch for efficiency
             }
-
-            stmt.executeUpdate();
+            int[] affectedRows = stmt.executeBatch();
+            for (int rows : affectedRows) {
+                if (rows <= 0) {
+                    return false; // At least one insert failed
+                }
+            }
             return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    public boolean addFinancialTransaction(int userId, int orderId, double amount, java.util.Date transactionDate) {
+        String sql = "INSERT INTO financial_transactions (UserID, OrderID, Amount, TransactionDate) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, orderId);
+            stmt.setDouble(3, amount);
+            stmt.setDate(4, new java.sql.Date(transactionDate.getTime()));
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

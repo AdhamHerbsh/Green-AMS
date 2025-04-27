@@ -5,6 +5,8 @@
  */
 package green.ams.models;
 
+import java.sql.Date;
+
 /**
  *
  * @author Adham
@@ -19,6 +21,9 @@ public class Area {
     private String address;
     private String land_area;
     private String status;
+    private String reply;
+    private Date requested_date;
+
     
     
     public Area() {
@@ -92,6 +97,20 @@ public class Area {
         this.status = status;
     }
     
-    
-    
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
+
+    public Date getRequested_date() {
+        return requested_date;
+    }
+
+    public void setRequested_date(Date requested_date) {
+        this.requested_date = requested_date;
+    }   
 }

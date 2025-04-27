@@ -23,7 +23,7 @@ public abstract class GLOBAL {
     //    Area ID
     public static int area_id;
     
-    protected static Locale currentLocale = new Locale("en"); // Default locale
+    public static Locale currentLocale = new Locale("en"); // Default locale
     protected static ResourceBundle bundle;
     
     Properties newBundle = new Properties();

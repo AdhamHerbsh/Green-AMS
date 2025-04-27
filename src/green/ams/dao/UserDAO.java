@@ -102,7 +102,7 @@ public class UserDAO extends DAO {
         }
 
         try {
-            String sql = "SELECT ID, FullName, Email, Address, PhoneNumber, Role, Password, CreatedDate FROM users WHERE ID = ?";
+            String sql = "SELECT ID, FullName, Email, Address, PhoneNumber, Role, Password, Score, CreatedDate FROM users WHERE ID = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
 
@@ -119,6 +119,7 @@ public class UserDAO extends DAO {
                 user.setPhone_number(rs.getString("PhoneNumber"));
                 user.setRole(rs.getString("Role"));
                 user.setPassword(rs.getString("Password"));
+                user.setScore(rs.getInt("Score"));
                 user.setCreated_date(rs.getDate("CreatedDate"));
             } else {
                 System.out.println("No user found for this id");
