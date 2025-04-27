@@ -1519,10 +1519,14 @@ public class ADMIN extends javax.swing.JFrame {
             sample_category = RBtnPlants.getText();
         } else if (RBtnTrees.isSelected()) {
             sample_category = RBtnTrees.getText();
-        } else if (RBtnIndoor.isSelected()) {
-            sample_category = RBtnIndoor.getText();
+        } else if (RBtnFlowers.isSelected()) {
+            sample_category = RBtnFlowers.getText();
         } else if (RBtnFruits_Vegetables.isSelected()) {
             sample_category = RBtnFruits_Vegetables.getText();
+        } else if (RBtnIndoor.isSelected()) {
+            sample_category = RBtnIndoor.getText();
+        } else if (RBtnOutdoor.isSelected()) {
+            sample_category = RBtnOutdoor.getText();
         } else {
             sample_category = "Undefined";
         }
